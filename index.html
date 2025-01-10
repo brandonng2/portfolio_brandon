@@ -1,0 +1,128 @@
+<!-- index.html (Home Page) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brandon Ng - Portfolio</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Ng</a>
+            <div class="nav__menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="/" class="nav__link active-link">
+                            <i class="uil uil-estate nav__icon"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/skills/index.html" class="nav__link">
+                            <i class="uil uil-file-alt nav__icon"></i> Skills
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/qualifications/index.html" class="nav__link">
+                            <i class="uil uil-briefcase-alt nav__icon"></i> Qualification
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/contact/index.html" class="nav__link">
+                            <i class="uil uil-message nav__icon"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <section class="home section" id="home">
+            <div class="home__container container">
+                <div class="home__content">
+                    <!-- Social Links -->
+                    <div class="home__social">
+                        <a href="https://www.linkedin.com/in/brandonng2/" class="home__social-icon" target="_blank">
+                            <i class="uil uil-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/brandonng2" class="home__social-icon" target="_blank">
+                            <i class="uil uil-github-alt"></i>
+                        </a>
+                        <a href="https://www.instagram.com/brandon_ng2/" class="home__social-icon" target="_blank">
+                            <i class="uil uil-instagram"></i>
+                        </a>
+                    </div>
+
+                    <!-- Profile Image -->
+                    <div class="home__img">
+                        <img src="images/profile.png" alt="Picture of me in a white shirt" className="button__icon"/>
+                    </div>
+
+                    <!-- Introduction -->
+                    <div class="home__data">
+                        <h1 class="home__title">
+                            Brandon Ng
+                            <img src="images/hand.svg" alt="" class="home__hand">
+                        </h1>
+                        <h3 class="home__subtitle">Software Engineer / Data Scientist</h3>
+                        <p class="home__description">
+                            Welcome! I'm Brandon Ng, a Data Science student at UC San Diego, 
+                            with strong interests in machine learning and artificial intelligence.
+                        </p>
+                        <a href="/contact/index.html" class="button button--flex">
+                            Say Hello
+                            <img src="images/send.svg" alt="" class="button__icon">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section className="about section" id="about">
+            <h2 className="section__title">About Me</h2>
+            <span className="section__subtitle">My introduction</span>
+    
+            <div className="about__container container grid">
+                <img src={AboutImg} alt="" className="about__img" />
+                <div className="about__data">
+                    <p className="about__description"> 
+                        Hi! I am a 4th year Data Science major at the UC, San Diego. 
+                        Inspired by Baymax from "Big Hero 6," 
+                        I've been passionate about machine learning, artificial 
+                        intelligence, and computer vision. The idea of using 
+                        technology to make an impact on people's lives 
+                        drew me to this field, and I've been passionate about 
+                        exploring the possibilities of computer science ever since.
+                        <br/><br/>
+                        Beyond academics, I enjoy weight lifting, playing 
+                        basketball and badminton, hanging out with friends and eating delicious food. I'm always eager to learn about new technologies and collaborate on projects that make a difference!
+                    </p>
+                    <a download='Resume_BrandonNg.pdf' href={CV} className="button button--flex">Download Resume
+                    </a>
+                </div>
+            </div>
+           </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container container">
+            <h4 class="footer__title">Ng</h4>
+            <div class="footer__social">
+                <a href="https://github.com/brandonng2" class="footer__social-icon" target="_blank">
+                    <i class="bx bxl-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/brandonng2/" class="footer__social-icon" target="_blank">
+                    <i class="bx bxl-linkedin"></i>
+                </a>
+            </div>
+            <span class="footer__copy">&#169; Brandon Ng. All rights reserved</span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brandon Ng - Contact</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Ng</a>
+            <div class="nav__menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="/" class="nav__link">
+                            <i class="uil uil-estate nav__icon"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/skills/index.html" class="nav__link">
+                            <i class="uil uil-file-alt nav__icon"></i> Skills
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/qualifications/index.html" class="nav__link">
+                            <i class="uil uil-briefcase-alt nav__icon"></i> Qualification
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/contact/index.html" class="nav__link active-link">
+                            <i class="uil uil-message nav__icon"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="contact section" id="contact">
+            <h2 class="section__title">Contact Me</h2>
+            <span class="section__subtitle">Get in touch</span>
+
+            <div class="contact__container container grid">
+                <div class="contact__content">
+                    <h3 class="contact__title">My Contact Information</h3>
+                    <div class="contact__info">
+                        <div class="contact__card">
+                            <i class="bx bxl-whatsapp contact__card-icon"></i>
+                            <h3 class="contact__card-title">Phone Number</h3>
+                            <span class="contact__card-data">(510) 415-2892</span>
+                            <a href="tel:+15104152892" class="contact__button">Call me
+                                <i class="bx bx-right-arrow-alt contact__button-icon"></i>
+                            </a>
+                        </div>
+                        <div class="contact__card">
+                            <i class="bx bx-mail-send contact__card-icon"></i>
+                            <h3 class="contact__card-title">Email</h3>
+                            <span class="contact__card-data">brandonng0904@gmail.com</span>
+                            <a href="mailto:brandonng0904@gmail.com" class="contact__button">Email me
+                                <i class="bx bx-right-arrow-alt contact__button-icon"></i>
+                            </a>
+                        </div>
+                        <div class="contact__card">
+                            <i class="bx bxl-linkedin-square contact__card-icon"></i>
+                            <h3 class="contact__card-title">LinkedIn</h3>
+                            <span class="contact__card-data">Brandon Ng</span>
+                            <a href="https://www.linkedin.com/in/brandonng2/" class="contact__button" target="_blank" rel="noopener noreferrer">
+                                Follow Me
+                                <i class="bx bx-right-arrow-alt contact__button-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact__content">
+                    <h3 class="contact__title">Send Me a Message Here</h3>
+                    <form action="mailto:brandonng0904@gmail.com" method="POST" enctype="text/plain" class="contact__form">
+                        <div class="contact__form-div">
+                            <label class="contact__form-tag">
+                                Email
+                                <input type="email" name="email" class="contact__form-input" placeholder="Insert your email">
+                            </label>
+                        </div>
+                        <div class="contact__form-div">
+                            <label class="contact__form-tag">
+                                Subject
+                                <input name="subject" class="contact__form-input" placeholder="Insert your subject">
+                            </label>
+                        </div>
+                        <div class="contact__form-div contact__form-area">
+                            <label class="contact__form-tag">
+                                Message
+                                <textarea name="body" class="contact__form-input" placeholder="Write your message"></textarea>
+                            </label>
+                        </div>
+                        <button class="button button--flex">
+                            Send Message
+                            <img src="assets/send.svg" alt="" class="button__icon">
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container container">
+            <h1 class="footer__title">Ng</h1>
+            <div class="footer__social">
+                <a href="https://github.com/brandonng2" class="footer__social-icon" target="_blank">
+                    <i class="bx bxl-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/brandonng2/" class="footer__social-icon" target="_blank">
+                    <i class="bx bxl-linkedin"></i>
+                </a>
+            </div>
+            <span class="footer__copy">&#169; Brandon Ng. All rights reserved</span>
+        </div>
+    </footer>
+</body>
+</html>
