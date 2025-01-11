@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brandon Ng - Projects</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Ng</a>
+            <div class="nav__menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="/" class="nav__link active-link">
+                            <i class="uil uil-estate nav__icon"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/skills/index.html" class="nav__link">
+                            <i class="uil uil-file-alt nav__icon"></i> Skills
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/qualifications/index.html" class="nav__link">
+                            <i class="uil uil-briefcase-alt nav__icon"></i> Qualification
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/project/index.html" class="nav__link">
+                            <i class="uil uil-message nav__icon"></i> Project
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/contact/index.html" class="nav__link">
+                            <i class="uil uil-message nav__icon"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="project section" id="projects">
+            <h2 class="section__title">Projects</h2>
+            <span class="section__subtitle">My personal work</span>
+
+            <div class="project__container container">
+                <div class="project__slider">
+                    <!-- Project 1 -->
+                    <div class="project__card">
+                        <img src="assets/project1.jpg" alt="" class="project__img">
+                        <h3 class="project__name">Plant Disease Detector</h3>
+                        <p class="project__description">A plant disease detector utilizing, a CNN model to classify leaf images and identify diseases across various plant species, achieving 77% accuracy across 38 disease categories.</p>
+                        <span class="project__language">Python, Pandas, Pytorch, OpenCV</span>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="project__card">
+                        <img src="assets/project2.jpg" alt="" class="project__img">
+                        <h3 class="project__name">ChatGPT EDA</h3>
+                        <p class="project__description">A project examining the impact of ChatGPT on UCSD's educational environment to uncover patterns in study hours, grades, and AI tool usage across departments.</p>
+                        <span class="project__language">Python, Pandas, Scikit-learn, Matplotlib</span>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="project__card">
+                        <img src="assets/project3.jpg" alt="" class="project__img">
+                        <h3 class="project__name">Culinary Insights</h3>
+                        <p class="project__description">An EDA project analyzing Food.com recipes, employing data cleaning, hypothesis testing, and a Random Forest model to predict recipe healthiness based on nutritional features.</p>
+                        <span class="project__language">Python, Pandas, Scikit-learn, Matplotlib</span>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="project__card">
+                        <img src="assets/project4.jpg" alt="" class="project__img">
+                        <h3 class="project__name">FitHub</h3>
+                        <p class="project__description">A mobile fitness application that helps users track workouts, find nearby gyms, and manage exercise data using a calendar system and Firebase backend.</p>
+                        <span class="project__language">Swift, Firebase, FS Calendar, GooglePlace</span>
+                    </div>
+
+                    <!-- Add other projects similarly -->
+                </div>
+
+                <div class="project__navigation">
+                    <button class="project__nav-btn prev" onclick="moveSlider(-1)">
+                        <i class="uil uil-angle-left-b"></i>
+                    </button>
+                    <div class="project__dots"></div>
+                    <button class="project__nav-btn next" onclick="moveSlider(1)">
+                        <i class="uil uil-angle-right-b"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container container">
+            <h1 class="footer__title">Ng</h1>
+            <div class="footer__social">
+                <a href="https://github.com/brandonng2" class="footer__social-icon" target="_blank">
+                    <i class="bx bxl-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/brandonng2/" class="footer__social-icon" target="_blank">
+                    <i class="bx bxl-linkedin"></i>
+                </a>
+            </div>
+            <span class="footer__copy">&#169; Brandon Ng. All rights reserved</span>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const cards = document.querySelectorAll('.project__card');
+        const dotsContainer = document.querySelector('.project__dots');
+
+        // Create dots
+        cards.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('project__dot');
+            if (index === 0) dot.classList.add('active');
+            dot.onclick = () => goToSlide(index);
+            dotsContainer.appendChild(dot);
+        });
+
+        function updateSlider() {
+            const offset = currentSlide * -100;
+            document.querySelector('.project__slider').style.transform = `translateX(${offset}%)`;
+            
+            // Update dots
+            document.querySelectorAll('.project__dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function moveSlider(direction) {
+            currentSlide += direction;
+            if (currentSlide >= cards.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = cards.length - 1;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        // Auto-advance slides every 5 seconds
+        setInterval(() => moveSlider(1), 5000);
+    </script>
+</body>
+</html>
