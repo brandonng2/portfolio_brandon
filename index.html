@@ -12,34 +12,24 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="nav container">
+        <nav class="nav">
             <a href="./" class="nav__logo">Ng</a>
             <div class="nav__menu">
                 <ul class="nav__list">
                     <li class="nav__item">
-                        <a href="./" class="nav__link active-link">
-                            <i class="uil uil-estate nav__icon"></i> Home
-                        </a>
+                        <a href="./" class="nav__link active-link">Home</a>
                     </li>
                     <li class="nav__item">
-                        <a href="./skills/" class="nav__link">
-                            <i class="uil uil-file-alt nav__icon"></i> Skills
-                        </a>
+                        <a href="./skills/" class="nav__link">Skills</a>
                     </li>
                     <li class="nav__item">
-                        <a href="./qualifications/" class="nav__link">
-                            <i class="uil uil-briefcase-alt nav__icon"></i> Qualification
-                        </a>
+                        <a href="./qualifications/" class="nav__link">CV/Resume</a>
                     </li>
                     <li class="nav__item">
-                        <a href="./project/" class="nav__link">
-                            <i class="uil uil-message nav__icon"></i> Project
-                        </a>
+                        <a href="./project/" class="nav__link">Projects</a>
                     </li>
                     <li class="nav__item">
-                        <a href="./contact/" class="nav__link">
-                            <i class="uil uil-message nav__icon"></i> Contact
-                        </a>
+                        <a href="./contact/" class="nav__link">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -73,7 +63,7 @@
                     <div class="home__data">
                         <h1 class="home__title">
                             Brandon Ng
-                            <img src="images/hand.svg" alt="" class="home__hand">
+                            
                         </h1>
                         <h3 class="home__subtitle">Software Engineer / Data Scientist</h3>
                         <p class="home__description">
@@ -82,33 +72,30 @@
                         </p>
                         <a href="/contact/index.html" class="button button--flex">
                             Say Hello
-                            <img src="images/send.svg" alt="" class="button__icon">
+                            <img src="/images/send.svg" alt="" class="button__icon">
                         </a>
                     </div>
                 </div>
             </div>
         </section>
-        <section className="about section" id="about">
-            <h2 className="section__title">About Me</h2>
-            <span className="section__subtitle">My introduction</span>
-    
-            <div className="about__container container grid">
-                <img src={AboutImg} alt="" className="about__img" />
-                <div className="about__data">
-                    <p className="about__description"> 
-                        Hi! I am a 4th year Data Science major at the UC, San Diego. 
-                        Inspired by Baymax from "Big Hero 6," 
-                        I've been passionate about machine learning, artificial 
-                        intelligence, and computer vision. The idea of using 
-                        technology to make an impact on people's lives 
-                        drew me to this field, and I've been passionate about 
-                        exploring the possibilities of computer science ever since.
-                        <br/><br/>
-                        Beyond academics, I enjoy weight lifting, playing 
-                        basketball and badminton, hanging out with friends and eating delicious food. I'm always eager to learn about new technologies and collaborate on projects that make a difference!
-                    </p>
-                    <a download='Resume_BrandonNg.pdf' href={CV} className="button button--flex">Download Resume
-                    </a>
+        <section class="about section" id="about">
+            <h2 class="section__title">A Little About Me...</h2>
+            <div class="about__container">
+                <div class="about__content">
+                    <div class="about__data">
+                        <p class="about__description"> 
+                            Hi! I am a 4th year Data Science major at the UC, San Diego. 
+                            Inspired by Baymax from "Big Hero 6," 
+                            I've been passionate about machine learning, artificial 
+                            intelligence, and computer vision. The idea of using 
+                            technology to make an impact on people's lives 
+                            drew me to this field, and I've been passionate about 
+                            exploring the possibilities of computer science ever since.
+                            <br/><br/>
+                            Beyond academics, I enjoy weight lifting, playing 
+                            basketball and badminton, hanging out with friends and eating delicious food. I'm always eager to learn about new technologies and collaborate on projects that make a difference!
+                        </p>
+                    </div>
                 </div>
             </div>
            </section>

@@ -11,34 +11,24 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="nav container">
+        <nav class="nav">
             <a href="../" class="nav__logo">Ng</a>
             <div class="nav__menu">
                 <ul class="nav__list">
                     <li class="nav__item">
-                        <a href="../" class="nav__link active-link">
-                            <i class="uil uil-estate nav__icon"></i> Home
-                        </a>
+                        <a href="../" class="nav__link">Home</a>
                     </li>
                     <li class="nav__item">
-                        <a href="../skills/" class="nav__link">
-                            <i class="uil uil-file-alt nav__icon"></i> Skills
-                        </a>
+                        <a href="../skills/" class="nav__link">Skills</a>
                     </li>
                     <li class="nav__item">
-                        <a href="../qualifications/" class="nav__link">
-                            <i class="uil uil-briefcase-alt nav__icon"></i> Qualification
-                        </a>
+                        <a href="../qualifications/" class="nav__link">CV/Resume</a>
                     </li>
                     <li class="nav__item">
-                        <a href="../project/" class="nav__link">
-                            <i class="uil uil-message nav__icon"></i> Project
-                        </a>
+                        <a href="../project/" class="nav__link">Projects</a>
                     </li>
                     <li class="nav__item">
-                        <a href="./" class="nav__link">
-                            <i class="uil uil-message nav__icon"></i> Contact
-                        </a>
+                        <a href="./" class="nav__link active-link">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -85,27 +75,24 @@
                 <div class="contact__content">
                     <h3 class="contact__title">Send Me a Message Here</h3>
                     <form action="mailto:brandonng0904@gmail.com" method="POST" enctype="text/plain" class="contact__form">
-                        <div class="contact__form-div">
-                            <label class="contact__form-tag">
-                                Email
-                                <input type="email" name="email" class="contact__form-input" placeholder="Insert your email">
-                            </label>
-                        </div>
-                        <div class="contact__form-div">
-                            <label class="contact__form-tag">
-                                Subject
-                                <input name="subject" class="contact__form-input" placeholder="Insert your subject">
-                            </label>
-                        </div>
-                        <div class="contact__form-div contact__form-area">
-                            <label class="contact__form-tag">
-                                Message
-                                <textarea name="body" class="contact__form-input" placeholder="Write your message"></textarea>
-                            </label>
-                        </div>
+                        <label>
+                            Email
+                            <input type="email" name="email" placeholder="Insert your email">
+                        </label>
+                        
+                        <label>
+                            Subject
+                            <input name="subject" placeholder="Insert your subject">
+                        </label>
+                        
+                        <label>
+                            Message
+                            <textarea name="body" placeholder="Write your message"></textarea>
+                        </label>
+                        
                         <button class="button button--flex">
                             Send Message
-                            <img src="assets/send.svg" alt="" class="button__icon">
+                            <img src="/images/send.svg" alt="" class="button__icon">
                         </button>
                     </form>
                 </div>

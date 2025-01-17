@@ -11,34 +11,24 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="nav container">
+        <nav class="nav">
             <a href="../" class="nav__logo">Ng</a>
             <div class="nav__menu">
                 <ul class="nav__list">
                     <li class="nav__item">
-                        <a href="../" class="nav__link active-link">
-                            <i class="uil uil-estate nav__icon"></i> Home
-                        </a>
+                        <a href="../" class="nav__link">Home</a>
                     </li>
                     <li class="nav__item">
-                        <a href="../skills/" class="nav__link">
-                            <i class="uil uil-file-alt nav__icon"></i> Skills
-                        </a>
+                        <a href="../skills/" class="nav__link">Skills</a>
                     </li>
                     <li class="nav__item">
-                        <a href="../qualifications/" class="nav__link">
-                            <i class="uil uil-briefcase-alt nav__icon"></i> Qualification
-                        </a>
+                        <a href="./" class="nav__link">CV/Resume</a>
                     </li>
                     <li class="nav__item">
-                        <a href="./" class="nav__link">
-                            <i class="uil uil-message nav__icon"></i> Project
-                        </a>
+                        <a href="../project/" class="nav__link active-link">Projects</a>
                     </li>
                     <li class="nav__item">
-                        <a href="../contact/" class="nav__link">
-                            <i class="uil uil-message nav__icon"></i> Contact
-                        </a>
+                        <a href="../contact/" class="nav__link">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -50,52 +40,54 @@
             <h2 class="section__title">Projects</h2>
             <span class="section__subtitle">My personal work</span>
 
-            <div class="project__container container">
-                <div class="project__slider">
-                    <!-- Project 1 -->
-                    <div class="project__card">
-                        <img src="assets/project1.jpg" alt="" class="project__img">
-                        <h3 class="project__name">Plant Disease Detector</h3>
-                        <p class="project__description">A plant disease detector utilizing, a CNN model to classify leaf images and identify diseases across various plant species, achieving 77% accuracy across 38 disease categories.</p>
-                        <span class="project__language">Python, Pandas, Pytorch, OpenCV</span>
-                    </div>
+            <div class="projects__container container">
+                <!-- Project 1 -->
+                <article class="project__card">
+                    <h3 class="project__name">Plant Disease Detector</h3>
+                    <img src="/images/project1.jpg" alt="Plant Disease Detector" class="project__img">
+                    <p class="project__description">A plant disease detector utilizing, a CNN model to classify leaf images and identify diseases across various plant species, achieving 77% accuracy across 38 disease categories.</p>
+                    <span class="project__language">Python, Pandas, Pytorch, OpenCV</span>
+                </article>
+        
+                <!-- Project 2 -->
+                <article class="project__card">
+                    <h3 class="project__name">ChatGPT EDA</h3>
+                    <img src="/images/project2.jpg" alt="ChatGPT EDA" class="project__img">
+                    <p class="project__description">A project examining the impact of ChatGPT on UCSD's educational environment to uncover patterns in study hours, grades, and AI tool usage across departments.</p>
+                    <span class="project__language">Python, Pandas, Scikit-learn, Matplotlib</span>
+                </article>
+        
+                <!-- Project 3 -->
+                <article class="project__card">
+                    <h3 class="project__name">Culinary Insights</h3>
+                    <img src="/images/project3.jpg" alt="Culinary Insights" class="project__img">
+                    <p class="project__description">An EDA project analyzing Food.com recipes, employing data cleaning, hypothesis testing, and a Random Forest model to predict recipe healthiness based on nutritional features.</p>
+                    <span class="project__language">Python, Pandas, Scikit-learn, Matplotlib</span>
+                </article>
+        
+                <!-- Project 4 -->
+                <article class="project__card">
+                    <h3 class="project__name">FitHub</h3>
+                    <img src="/images/project4.jpg" alt="FitHub" class="project__img">
+                    <p class="project__description">A mobile fitness application that helps users track workouts, find nearby gyms, and manage exercise data using a calendar system and Firebase backend.</p>
+                    <span class="project__language">Swift, Firebase, FS Calendar, GooglePlace</span>
+                </article>
 
-                    <!-- Project 2 -->
-                    <div class="project__card">
-                        <img src="assets/project2.jpg" alt="" class="project__img">
-                        <h3 class="project__name">ChatGPT EDA</h3>
-                        <p class="project__description">A project examining the impact of ChatGPT on UCSD's educational environment to uncover patterns in study hours, grades, and AI tool usage across departments.</p>
-                        <span class="project__language">Python, Pandas, Scikit-learn, Matplotlib</span>
-                    </div>
+                <!-- Project 5 -->
+                <article class="project__card">
+                    <h3 class="project__name">UCSD Set Scrapper</h3>
+                    <img src="/images/project5.jpg" alt="UCSD Set Scrapper" class="project__img">
+                    <p class="project__description">A script to automate data collection from the UCSD SET website, compiling course evaluation data into a structured Pandas DataFrame for further analysis.</p>
+                    <span class="project__language">Python, Pandas, BeautifulSoup, Selenium</span>
+                </article>
 
-                    <!-- Project 3 -->
-                    <div class="project__card">
-                        <img src="assets/project3.jpg" alt="" class="project__img">
-                        <h3 class="project__name">Culinary Insights</h3>
-                        <p class="project__description">An EDA project analyzing Food.com recipes, employing data cleaning, hypothesis testing, and a Random Forest model to predict recipe healthiness based on nutritional features.</p>
-                        <span class="project__language">Python, Pandas, Scikit-learn, Matplotlib</span>
-                    </div>
-
-                    <!-- Project 4 -->
-                    <div class="project__card">
-                        <img src="assets/project4.jpg" alt="" class="project__img">
-                        <h3 class="project__name">FitHub</h3>
-                        <p class="project__description">A mobile fitness application that helps users track workouts, find nearby gyms, and manage exercise data using a calendar system and Firebase backend.</p>
-                        <span class="project__language">Swift, Firebase, FS Calendar, GooglePlace</span>
-                    </div>
-
-                    <!-- Add other projects similarly -->
-                </div>
-
-                <div class="project__navigation">
-                    <button class="project__nav-btn prev" onclick="moveSlider(-1)">
-                        <i class="uil uil-angle-left-b"></i>
-                    </button>
-                    <div class="project__dots"></div>
-                    <button class="project__nav-btn next" onclick="moveSlider(1)">
-                        <i class="uil uil-angle-right-b"></i>
-                    </button>
-                </div>
+                <!-- Project 6 -->
+                <article class="project__card">
+                    <h3 class="project__name">Encyclodex</h3>
+                    <img src="/images/project6.jpg" alt="Encyclodex" class="project__img">
+                    <p class="project__description">An interactive website replicating the Pokémon Pokédex, utilizing asynchronous functions to fetch data from PokéAPI and dynamically update the page.</p>
+                    <span class="project__language">HTML, CSS, Javascript</span>
+                </article>
             </div>
         </section>
     </main>
@@ -115,45 +107,5 @@
             <span class="footer__copy">&#169; Brandon Ng. All rights reserved</span>
         </div>
     </footer>
-
-    <script>
-        let currentSlide = 0;
-        const cards = document.querySelectorAll('.project__card');
-        const dotsContainer = document.querySelector('.project__dots');
-
-        // Create dots
-        cards.forEach((_, index) => {
-            const dot = document.createElement('span');
-            dot.classList.add('project__dot');
-            if (index === 0) dot.classList.add('active');
-            dot.onclick = () => goToSlide(index);
-            dotsContainer.appendChild(dot);
-        });
-
-        function updateSlider() {
-            const offset = currentSlide * -100;
-            document.querySelector('.project__slider').style.transform = `translateX(${offset}%)`;
-            
-            // Update dots
-            document.querySelectorAll('.project__dot').forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-
-        function moveSlider(direction) {
-            currentSlide += direction;
-            if (currentSlide >= cards.length) currentSlide = 0;
-            if (currentSlide < 0) currentSlide = cards.length - 1;
-            updateSlider();
-        }
-
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlider();
-        }
-
-        // Auto-advance slides every 5 seconds
-        setInterval(() => moveSlider(1), 5000);
-    </script>
 </body>
 </html>
