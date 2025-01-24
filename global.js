@@ -56,6 +56,7 @@ const ARE_WE_HOME = document.documentElement.classList.contains("home");
 for (let p of pages) {
   let url = p.url;
   if (!url.startsWith("http")) {
+    console.log(ARE_WE_HOME);
     url = ARE_WE_HOME ? "./" + url : "../" + url;
   }
 
