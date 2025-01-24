@@ -44,10 +44,10 @@ ul.className = "nav__list";
 // Define pages
 const pages = [
   { url: "./", title: "Home" },
-  { url: "./skills/", title: "Skills" },
-  { url: "./qualifications/", title: "CV/Resume" },
-  { url: "./project/", title: "Projects" },
-  { url: "./contact/", title: "Contact" },
+  { url: "../skills/", title: "Skills" },
+  { url: "../qualifications/", title: "CV/Resume" },
+  { url: "../project/", title: "Projects" },
+  { url: "../contact/", title: "Contact" },
 ];
 
 const ARE_WE_HOME = document.documentElement.classList.contains("home");
