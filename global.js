@@ -55,8 +55,8 @@ const ARE_WE_HOME = document.documentElement.classList.contains("home");
 // Create nav items
 for (let p of pages) {
   let url = p.url;
-  if (!ARE_WE_HOME && !url.startsWith("http")) {
-    url = "./" + url;
+  if (!url.startsWith("http")) {
+    url = ARE_WE_HOME ? "./" + url : "../" + url;
   }
 
   const li = document.createElement("li");
