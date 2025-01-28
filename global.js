@@ -53,17 +53,23 @@ export function renderProjects(
     projectsTitle.textContent = `(${projects.length}) Projects`;
   }
 
+  // Check if we're on the home page
+  const isHomePage = document.documentElement.classList.contains("home");
+
   // Render each project
   projects.forEach((project) => {
     const article = document.createElement("article");
     article.className = "project__card";
 
+    // Determine the correct image path based on the page
+    const imagePath = isHomePage ? `./${project.image}` : `../${project.image}`;
+
     article.innerHTML = `
-          <h3 class="project__name">${project.title}</h3>
-          <img src="${project.image}" alt="${project.title}" class="project__img">
-          <p class="project__description">${project.description}</p>
-          <span class="project__language">${project.language}</span>
-      `;
+      <h3 class="project__name">${project.title}</h3>
+      <img src="${imagePath}" alt="${project.title}" class="project__img">
+      <p class="project__description">${project.description}</p>
+      <span class="project__language">${project.language}</span>
+    `;
 
     containerElement.appendChild(article);
   });
