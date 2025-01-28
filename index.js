@@ -1,4 +1,4 @@
-import { fetchJSON, renderProjects, fetchGitHubData } from "../global.js";
+import { fetchJSON, renderProjects, fetchGitHubData } from "./global.js";
 
 // Get the container elements
 const projectsContainer = document.querySelector(".projects__container");
