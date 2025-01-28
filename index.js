@@ -29,7 +29,7 @@ async function initializeGitHubStats() {
 
 // Fetch and render projects
 async function initializeProjects() {
-  const projects = await fetchJSON("../lib/projects.json");
+  const projects = await fetchJSON("./lib/projects.json");
   if (projects) {
     const latestProjects = projects.slice(0, 4);
     renderProjects(latestProjects, projectsContainer, "h3");
