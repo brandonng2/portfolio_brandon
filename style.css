@@ -529,11 +529,12 @@ img {
 }
 
 .project__card {
+    position: relative;
     display: grid;
     grid-template-rows: subgrid;
     grid-row: span 4;
     background-color: var(--container-color);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
     padding: 1.5rem;
     border-radius: 1.5rem;
     gap: 1rem;
@@ -568,6 +569,15 @@ img {
     font-size: var(--small-font-size);
     color: var(--text-color);
     font-style: italic;
+}
+
+.project__year {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    font-size: var(--smaller-font-size);
+    color: var(--text-color);
 }
 
 /*=============== BREAKPOINTS ===============*/

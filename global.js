@@ -65,10 +65,11 @@ export function renderProjects(
     const imagePath = isHomePage ? `./${project.image}` : `../${project.image}`;
 
     article.innerHTML = `
-      <h3 class="project__name">${project.title}</h3>
-      <img src="${imagePath}" alt="${project.title}" class="project__img">
-      <p class="project__description">${project.description}</p>
-      <span class="project__language">${project.language}</span>
+    <p class="project__year">${project.year}</p>
+    <h3 class="project__name">${project.title}</h3>
+    <img src="${imagePath}" alt="${project.title}" class="project__img">
+    <p class="project__description">${project.description}</p>
+    <span class="project__language">${project.language}</span>
     `;
 
     containerElement.appendChild(article);
