@@ -105,6 +105,7 @@ const pages = [
   { url: "skills/", title: "Skills" },
   { url: "qualifications/", title: "CV/Resume" },
   { url: "project/", title: "Projects" },
+  { url: "meta/", title: "Meta" },
   { url: "contact/", title: "Contact" },
 ];
 

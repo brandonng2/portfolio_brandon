@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Brandon Ng's Personal Portfolio - Meta Analysis">
+    <meta name="author" content="Brandon Ng">
+    <title>Brandon Ng - Meta Analysis</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="main">
+        <section class="meta section" id="meta">
+            <h1 class="section__title">Meta Analysis</h1>
+            <span class="section__subtitle">Repository Analytics</span>
+            <div class="stats__container">
+                <div id="stats"></div>
+            </div>
+            <div class="chart-container">
+                <h2>Commits by Time of Day</h2>
+                <div id="chart"></div>
+                <p id="selection-count">No commits selected</p>
+                <dl id="language-breakdown" class="stats"></dl>
+            </div>
+            <dl id="commit-tooltip" class="info tooltip" hidden>
+                <dt>Commit</dt>
+                <dd>
+                    <a href="" id="commit-link" target="_blank" rel="noopener noreferrer"></a>
+                </dd>
+                <dt>Date</dt>
+                <dd id="commit-date"></dd>
+                <dt>Time</dt>
+                <dd id="commit-time"></dd>
+                <dt>Author</dt>
+                <dd id="commit-author"></dd>
+                <dt>Lines Changed</dt>
+                <dd id="commit-lines"></dd>
+            </dl>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="footer__container container">
+            <h3 class="footer__title">Brandon Ng</h3>
+            
+            <div class="footer__social">
+                <a href="https://github.com/brandonng2" 
+                   class="footer__social-icon" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   aria-label="GitHub Profile">
+                    <i class="bx bxl-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/brandonng2/" 
+                   class="footer__social-icon" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   aria-label="LinkedIn Profile">
+                    <i class="bx bxl-linkedin"></i>
+                </a>
+            </div>
+            
+            <span class="footer__copy">&copy; 2024 Brandon Ng. All rights reserved</span>
+        </div>
+    </footer>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="./main.js"></script>
+    <script src="../global.js" type="module"></script>
+</body>
+</html

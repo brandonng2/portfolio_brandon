@@ -1,0 +1,424 @@
+/*=============== GOOGLE FONTS ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+/*=============== CSS VARIABLES ===============*/
+:root {
+    --header-height: 3rem;
+    --color-accent: oklch(63.49% 0.1455 239.16);
+
+    /*========== Colors ==========*/
+    color-scheme: light;
+    --title-color: hsl(0, 0%, 20%);
+    --title-color-dark: hsl(0, 0%, 0%);
+    --text-color: hsl(0, 0%, 46%);
+    --body-color: hsl(0, 0%, 98%);
+    --container-color: #fff;
+    --border-color: oklch(50% 10% 200 / 40%);
+
+    /*========== Font and typography ==========*/
+    --body-font: "Poppins", sans-serif;
+    --big-font-size: 3.5rem;
+    --h1-font-size: 2.25rem;
+    --h2-font-size: 1.5rem;
+    --h3-font-size: 1.25rem;
+    --normal-font-size: 1rem;
+    --small-font-size: 0.875rem;
+    --smaller-font-size: 0.813rem;
+    --tiny-font-size: 0.625rem;
+
+    /*========== Font weight ==========*/
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semi-bold: 600;
+
+    /*========== z index ==========*/
+    --z-tooltip: 10;
+    --z-fixed: 100;
+    --z-modal: 1000;
+}
+
+/*=============== DARK THEME ===============*/
+:root.dark {
+    --title-color: hsl(0, 0%, 80%);
+    --title-color-dark: hsl(0, 0%, 100%);
+    --text-color: hsl(0, 0%, 70%);
+    --body-color: hsl(0, 0%, 8%);
+    --container-color: hsl(0, 0%, 12%);
+}
+
+/*=============== BASE ===============*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+    background-color: var(--body-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    color: var(--title-color);
+    font-weight: var(--font-semi-bold);
+    margin-bottom: 1rem;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/*=============== REUSABLE CLASSES ===============*/
+.container {
+    max-width: 968px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+.grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.section {
+    padding: 6rem 0 2rem;
+}
+
+.section__title {
+    font-size: var(--h1-font-size);
+    color: var(--title-color);
+    text-align: center;
+}
+
+.section__subtitle {
+    display: block;
+    font-size: var(--small-font-size);
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+/*=============== HEADER & NAV ===============*/
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-fixed);
+    background-color: var(--body-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav {
+    height: calc(var(--header-height) + 1.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    max-width: 100ch;
+    margin-inline: max(1em, (100% - 100ch) / 2);
+}
+
+.nav__logo {
+    font-weight: var(--font-semi-bold);
+    font-size: var(--h2-font-size);
+}
+
+.nav__menu {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.nav__list {
+    display: contents;
+}
+
+.nav__item {
+    display: contents;
+}
+
+.nav__link {
+    padding: 0.5em;
+    font-weight: var(--font-medium);
+    position: relative;
+}
+
+.nav__link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 0.4em;
+    background: transparent;
+    bottom: 0;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.nav__link:hover {
+    background-color: oklch(from var(--color-accent) 95% 5% h);
+}
+
+:root.dark .nav__link:hover {
+    background-color: oklch(from var(--color-accent) 30% 10% h);
+}
+
+.nav__link:hover::after,
+.active-link::after {
+    background: var(--color-accent);
+}
+
+.active-link {
+    padding-bottom: 0.1em;
+}
+
+/*=============== STATS SECTION ===============*/
+.stats__container {
+    max-width: 900px;
+    margin: 2rem auto 3rem;
+    padding: 2rem;
+    background-color: var(--container-color);
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1rem;
+    text-align: center;
+}
+
+.stats dt {
+    grid-row: 1;
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+    font-size: var(--small-font-size);
+}
+
+.stats dd {
+    grid-row: 2;
+    margin: 0;
+    font-size: var(--h3-font-size);
+    color: var(--title-color);
+}
+
+/*=============== CHART SECTION ===============*/
+.chart-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--container-color);
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--title-color);
+}
+
+#chart {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.gridlines line {
+    stroke-width: 1px;
+    stroke-opacity: 0.2;
+}
+
+.gridlines path {
+    display: none;
+}
+
+/*=============== TOOLTIP ===============*/
+.tooltip {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    background: var(--container-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: var(--z-tooltip);
+}
+
+.info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+    margin: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.info[hidden] {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.info dt {
+    color: var(--text-color);
+    font-size: var(--small-font-size);
+}
+
+.info dd {
+    margin: 0;
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+}
+
+/*=============== CHART ELEMENTS ===============*/
+circle {
+    transition: transform 0.2s ease;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+circle:hover {
+    transform: scale(1.5);
+}
+
+@keyframes marching-ants {
+    to {
+      stroke-dashoffset: -8; /* 5 + 3 */
+    }
+  }
+  
+.selection {
+    fill-opacity: 0.1;
+    stroke: black;
+    stroke-opacity: 0.7;
+    stroke-dasharray: 5 3;
+    animation: marching-ants 2s linear infinite;
+}
+  
+circle.selected {
+    fill: #ff6b6b;
+}
+
+/*=============== FOOTER ===============*/
+.footer {
+    background-color: var(--container-color);
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.footer__container {
+    text-align: center;
+}
+
+.footer__title {
+    font-size: var(--h1-font-size);
+    font-weight: var(--font-semi-bold);
+    margin-bottom: 2rem;
+}
+
+.footer__social {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.footer__social-icon {
+    background-color: var(--title-color);
+    color: var(--container-color);
+    font-size: 1.125rem;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    transition: background-color 0.3s ease;
+}
+
+.footer__social-icon:hover {
+    background-color: var(--title-color-dark);
+}
+
+.footer__copy {
+    color: var(--title-color);
+    font-size: var(--smaller-font-size);
+}
+
+/*=============== RESPONSIVE STYLES ===============*/
+@media screen and (max-width: 768px) {
+    .nav__menu {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--body-color);
+        padding: 2rem 1.5rem 4rem;
+        box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.15);
+        border-radius: 1.5rem 1.5rem 0 0;
+        transition: 0.3s;
+        gap: 2rem;
+        flex-direction: column;
+    }
+
+    .nav__link {
+        padding: 0.75em;
+    }
+
+    .show-menu {
+        bottom: 0;
+    }
+
+    .container {
+        padding-inline: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .section {
+        padding: 4rem 0 1rem;
+    }
+
+    .section__subtitle {
+        margin-bottom: 2rem;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .container {
+        margin-inline: 1rem;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
