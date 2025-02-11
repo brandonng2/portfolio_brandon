@@ -8,31 +8,27 @@ let brushSelection = null;
 const width = 1000;
 const height = 600;
 
-// Brush handling functions
+// Selection functions
 function isCommitSelected(commit) {
   if (!brushSelection) return false;
 
-  const min = { x: brushSelection[0][0], y: brushSelection[0][1] };
-  const max = { x: brushSelection[1][0], y: brushSelection[1][1] };
-
+  const [[x0, y0], [x1, y1]] = brushSelection;
   const x = xScale(commit.datetime);
   const y = yScale(commit.hourFrac);
 
-  return x >= min.x && x <= max.x && y >= min.y && y <= max.y;
-}
-
-function updateSelection() {
-  d3.selectAll("circle").classed("selected", (d) => isCommitSelected(d));
+  return x >= x0 && x <= x1 && y >= y0 && y <= y1;
 }
 
 function updateSelectionCount() {
   const selectedCommits = brushSelection
     ? commits.filter(isCommitSelected)
     : [];
+
   const countElement = document.getElementById("selection-count");
   countElement.textContent = `${
     selectedCommits.length || "No"
   } commits selected`;
+
   return selectedCommits;
 }
 
@@ -42,13 +38,12 @@ function updateLanguageBreakdown() {
     : [];
   const container = document.getElementById("language-breakdown");
 
-  if (selectedCommits.length === 0) {
+  if (!selectedCommits.length) {
     container.innerHTML = "";
     return;
   }
 
-  const requiredCommits = selectedCommits.length ? selectedCommits : commits;
-  const lines = requiredCommits.flatMap((d) => d.lines);
+  const lines = selectedCommits.flatMap((d) => d.lines);
 
   // Use d3.rollup to count lines per language
   const breakdown = d3.rollup(
@@ -71,13 +66,6 @@ function updateLanguageBreakdown() {
   }
 
   return breakdown;
-}
-
-function brushed(event) {
-  brushSelection = event.selection;
-  updateSelection();
-  updateSelectionCount();
-  updateLanguageBreakdown();
 }
 
 // Tooltip handling functions
@@ -222,8 +210,39 @@ function getTimeColor(hour) {
   return "#4299e1"; // Light blue for evening
 }
 
+// Create brush function
+function createBrush(svg, mainGroup) {
+  const brush = d3.brush().on("start brush end", (event) => {
+    brushSelection = event.selection;
+    if (event.selection) {
+      // Convert brush coordinates to data space
+      const [[x0, y0], [x1, y1]] = event.selection;
+
+      // Update visual selection
+      mainGroup.selectAll("circle").classed("selected", (d) => {
+        const cx = xScale(d.datetime);
+        const cy = yScale(d.hourFrac);
+        return cx >= x0 && cx <= x1 && cy >= y0 && cy <= y1;
+      });
+
+      // Update selection stats
+      updateSelectionCount();
+      updateLanguageBreakdown();
+    } else {
+      // Clear selection if brush is removed
+      mainGroup.selectAll("circle").classed("selected", false);
+      updateSelectionCount();
+      updateLanguageBreakdown();
+    }
+  });
+
+  // Add brush to existing brush group
+  svg.select(".brush").call(brush);
+
+  return brush;
+}
+
 function createScatterplot() {
-  console.log("Creating scatterplot with commits:", commits.length);
   const margin = { top: 10, right: 10, bottom: 30, left: 20 };
 
   const usableArea = {
@@ -293,8 +312,6 @@ function createScatterplot() {
   // Add dots
   const dots = mainGroup.append("g").attr("class", "dots");
 
-  console.log("Creating circles with sortedCommits:", sortedCommits.length);
-
   dots
     .selectAll("circle")
     .data(sortedCommits)
@@ -325,41 +342,19 @@ function createScatterplot() {
         .attr("r", (d) => rScale(d.totalLines));
     });
 
-  // Create brush
-  const brush = d3.brush().on("start brush end", brushed);
+  // Create and add brush
+  const brushGroup = svg.append("g").attr("class", "brush");
+  createBrush(svg, mainGroup);
 
-  svg
-    .append("g")
-    .attr("class", "brush")
-    .call(brush)
-    .attr("cx", (d) => xScale(d.datetime))
-    .attr("cy", (d) => yScale(d.hourFrac))
-    .attr("r", (d) => rScale(d.totalLines))
-    .attr("fill", (d) => getTimeColor(d.datetime.getHours()))
-    .style("fill-opacity", 0.7)
-    .on("mouseenter", (event, commit) => {
-      updateTooltipContent(commit);
-      updateTooltipPosition(event);
-      d3.select(event.target)
-        .transition()
-        .duration(200)
-        .style("fill-opacity", 1)
-        .attr("r", (d) => rScale(d.totalLines) * 1.2);
-    })
-    .on("mousemove", (event) => {
-      updateTooltipPosition(event);
-    })
-    .on("mouseleave", (event) => {
-      updateTooltipContent({});
-      d3.select(event.target)
-        .transition()
-        .duration(200)
-        .style("fill-opacity", 0.7)
-        .attr("r", (d) => rScale(d.totalLines));
-    });
+  // Ensure dots are above brush overlay by moving the brush group below dots
+  brushGroup.lower();
 
-  // Raise dots above brush overlay
-  d3.select(svg).selectAll(".dots, .overlay ~ *").raise();
+  // Set pointer-events to none on the brush overlay to allow interaction with dots
+  brushGroup.select(".overlay").style("pointer-events", "all");
+
+  brushGroup.select(".selection").style("pointer-events", "none");
+
+  brushGroup.selectAll(".handle").style("pointer-events", "none");
 
   // Add legend
   const legendData = [
@@ -400,26 +395,18 @@ function createScatterplot() {
 }
 
 async function loadData() {
-  try {
-    data = await d3.csv("loc.csv", (row) => ({
-      ...row,
-      line: Number(row.line),
-      depth: Number(row.depth),
-      length: Number(row.length),
-      date: new Date(row.date + "T00:00" + row.timezone),
-      datetime: new Date(row.datetime),
-    }));
+  data = await d3.csv("loc.csv", (row) => ({
+    ...row,
+    line: Number(row.line),
+    depth: Number(row.depth),
+    length: Number(row.length),
+    date: new Date(row.date + "T00:00" + row.timezone),
+    datetime: new Date(row.datetime),
+  }));
 
-    console.log("Loaded data:", data.slice(0, 5)); // Check first 5 rows
-
-    processCommits(); // We need to process commits before creating scatterplot
-    console.log("Processed commits:", commits.slice(0, 5)); // Check first 5 commits
-
-    displayStats();
-    createScatterplot();
-  } catch (error) {
-    console.error("Error loading data:", error);
-  }
+  processCommits();
+  displayStats();
+  createScatterplot();
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
