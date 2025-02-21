@@ -72,6 +72,14 @@ export function renderProjects(
     <span class="project__language">${project.language}</span>
     `;
 
+    // Add click handler if project has a URL
+    if (project.url) {
+      article.style.cursor = "pointer";
+      article.addEventListener("click", () => {
+        window.open(project.url, "_blank", "noopener,noreferrer");
+      });
+    }
+
     containerElement.appendChild(article);
   });
 }

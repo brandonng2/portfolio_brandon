@@ -1,86 +1,98 @@
 [
 	{
+		"title": "LaneLogic",
+		"image": "images/project2.jpg",
+		"description": "LaneLogic is a web application that visualizes Boston's bike-sharing system by displaying bike lanes and station activity through an interactive map, where station markers dynamically resize and change color based on the ratio of arrivals to departures at different times of day.",
+		"language": "HTML, CSS, Javascript, D3.js",
+		"year": "2025",
+		"url": "https://brandonng2.github.io/LaneLogic/"
+	},
+	{
+		"title": "ExamForge",
+		"image": "images/project3.jpg",
+		"description": "ExamForge is an AI-powered study platform that generates personalized practice exams, flashcards, and matching games by analyzing your uploaded study materials, helping you study more effectively with custom questions, instant feedback, and engaging review tools.",
+		"language": "Next.js, Gemini API, HMTL, CSS, TypeScript, Clerk.js, Stripe, React.js",
+		"year": "2024",
+		"url": "https://exam-forge.vercel.app/"
+	},
+	{
 	  "title": "Plant Disease Detector",
 	  "image": "images/project1.jpg",
 	  "description": "A plant disease detector utilizing, a CNN model to classify leaf images and identify diseases across various plant species, achieving 77% accuracy across 38 disease categories.",
 	  "language": "Python, Pandas, Pytorch, OpenCV",
-	  "year": "2024"
+	  "year": "2024",
+	  "url": ""
 	},
 	{
 	  "title": "Culinary Insights",
 	  "image": "images/project2.jpg",
 	  "description": "An EDA project analyzing Food.com recipes, employing data cleaning, hypothesis testing, and a Random Forest model to predict recipe healthiness based on nutritional features.",
 	  "language": "Python, Pandas, Scikit-learn, Matplotlib",
-	  "year": "2024"
+	  "year": "2024",
+	  "url": "https://jaw039.github.io/CulinaryInsights/"
 	},
 	{
 	  "title": "ChatGPT EDA",
 	  "image": "images/project3.jpg",
 	  "description": "A project examining the impact of ChatGPT on UCSD's educational environment to uncover patterns in study hours, grades, and AI tool usage across departments.",
 	  "language": "Python, Pandas, Scikit-learn, Matplotlib",
-	  "year": "2024"
+	  "year": "2024",
+	  "url": "https://github.com/brandonng2/ChatGPT-EDA"
+	},
+	{
+		"title": "UCSD Set Scrapper",
+		"image": "images/project5.jpg",
+		"description": "A script to automate data collection from the UCSD SET website, compiling course evaluation data into a structured Pandas DataFrame for further analysis.",
+		"language": "Python, Pandas, BeautifulSoup, Selenium",
+		"year": "2024",
+		"url": "https://github.com/brandonng2/UCSD-SET-Data-Scraper"
 	},
 	{
 	  "title": "FitHub",
 	  "image": "images/project4.jpg",
 	  "description": "A mobile fitness application that helps users track workouts, find nearby gyms, and manage exercise data using a calendar system and Firebase backend.",
 	  "language": "Swift, Firebase, FS Calendar, GooglePlace",
-	  "year": "2023"
-	},
-	{
-	  "title": "UCSD Set Scrapper",
-	  "image": "images/project5.jpg",
-	  "description": "A script to automate data collection from the UCSD SET website, compiling course evaluation data into a structured Pandas DataFrame for further analysis.",
-	  "language": "Python, Pandas, BeautifulSoup, Selenium",
-	  "year": "2024"
-	},
-	{
-	  "title": "Encyclodex",
-	  "image": "images/project6.jpg",
-	  "description": "An interactive website replicating the Pokémon Pokédex, utilizing asynchronous functions to fetch data from PokéAPI and dynamically update the page.",
-	  "language": "HTML, CSS, Javascript",
-	  "year": "2022"
+	  "year": "2023",
+	  "url": "https://github.com/CodePathGroup8F22/CodePathFitnessApp"
 	},
 	{
 	  "title": "PantryPal",
 	  "image": "images/project7.jpg",
 	  "description": "A smart pantry management web app featuring AI-powered receipt scanning for automated inventory updates, allowing users to efficiently track and manage their kitchen stock.",
 	  "language": "React, Next.js, Firebase, Gemini API",
-	  "year": "2023"
+	  "year": "2023",
+	  "url": "https://github.com/brandonng2/Pantry-Pal-AI"
 	},
 	{
 	  "title": "Twitter App",
 	  "image": "images/project1.jpg",
 	  "description": "A fully functional Twitter client allowing users to view, compose, favorite, and retweet tweets, with features like real-time feed updates and infinite scrolling.",
 	  "language": "Swift, Twitter API",
-	  "year": "2023"
+	  "year": "2023",
+	  "url": "https://github.com/brandonng2/Twitter-App"
 	},
 	{
-	  "title": "Lorem ipsum dolor sit.",
-	  "image": "images/project2.jpg",
-	  "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit.",
-	  "language": "None",
-	  "year": "2021"
-	},
-	{
-	  "title": "Lorem ipsum dolor sit.",
-	  "image": "images/project3.jpg",
-	  "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit.",
-	  "language": "None",
-	  "year": "2022"
+		"title": "Encyclodex",
+		"image": "images/project6.jpg",
+		"description": "An interactive website replicating the Pokémon Pokédex, utilizing asynchronous functions to fetch data from PokéAPI and dynamically update the page.",
+		"language": "HTML, CSS, Javascript",
+		"year": "2022",
+		"url": "https://brandonng2.github.io/Encyclodex/"
 	},
 	{
 	  "title": "Lorem ipsum dolor sit.",
 	  "image": "images/project4.jpg",
 	  "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit.",
 	  "language": "None",
-	  "year": "2023"
+	  "year": "2023",
+	  "url": ""
 	},
 	{
 	  "title": "Lorem ipsum dolor sit.",
 	  "image": "images/project5.jpg",
 	  "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit.",
 	  "language": "None",
-	  "year": "2025"
+	  "year": "2021",
+	  "url": ""
 	}
   ]
