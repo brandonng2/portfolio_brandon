@@ -2,7 +2,7 @@
 let data = [];
 let commits = [];
 let xScale, yScale;
-let brushSelection = null;
+let selectedCommits = [];
 
 // Define dimensions
 const width = 1000;
@@ -10,20 +10,10 @@ const height = 600;
 
 // Selection functions
 function isCommitSelected(commit) {
-  if (!brushSelection) return false;
-
-  const [[x0, y0], [x1, y1]] = brushSelection;
-  const x = xScale(commit.datetime);
-  const y = yScale(commit.hourFrac);
-
-  return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  return selectedCommits.includes(commit);
 }
 
 function updateSelectionCount() {
-  const selectedCommits = brushSelection
-    ? commits.filter(isCommitSelected)
-    : [];
-
   const countElement = document.getElementById("selection-count");
   countElement.textContent = `${
     selectedCommits.length || "No"
@@ -33,9 +23,6 @@ function updateSelectionCount() {
 }
 
 function updateLanguageBreakdown() {
-  const selectedCommits = brushSelection
-    ? commits.filter(isCommitSelected)
-    : [];
   const container = document.getElementById("language-breakdown");
 
   if (!selectedCommits.length) {
@@ -211,29 +198,35 @@ function getTimeColor(hour) {
 }
 
 // Create brush function
-function createBrush(svg, mainGroup) {
-  const brush = d3.brush().on("start brush end", (event) => {
-    brushSelection = event.selection;
-    if (event.selection) {
-      // Convert brush coordinates to data space
-      const [[x0, y0], [x1, y1]] = event.selection;
+function brushed(event, mainGroup) {
+  const brushSelection = event.selection;
 
-      // Update visual selection
-      mainGroup.selectAll("circle").classed("selected", (d) => {
-        const cx = xScale(d.datetime);
-        const cy = yScale(d.hourFrac);
-        return cx >= x0 && cx <= x1 && cy >= y0 && cy <= y1;
+  selectedCommits = !brushSelection
+    ? selectedCommits // preserve existing selection if brush is cleared
+    : commits.filter((commit) => {
+        const x = xScale(commit.datetime);
+        const y = yScale(commit.hourFrac);
+        return (
+          x >= brushSelection[0][0] &&
+          x <= brushSelection[1][0] &&
+          y >= brushSelection[0][1] &&
+          y <= brushSelection[1][1]
+        );
       });
 
-      // Update selection stats
-      updateSelectionCount();
-      updateLanguageBreakdown();
-    } else {
-      // Clear selection if brush is removed
-      mainGroup.selectAll("circle").classed("selected", false);
-      updateSelectionCount();
-      updateLanguageBreakdown();
-    }
+  // Update visual selection
+  mainGroup
+    .selectAll("circle")
+    .classed("selected", (d) => selectedCommits.includes(d));
+
+  // Update selection stats
+  updateSelectionCount();
+  updateLanguageBreakdown();
+}
+
+function createBrush(svg, mainGroup) {
+  const brush = d3.brush().on("start brush end", (event) => {
+    brushed(event, mainGroup);
   });
 
   // Add brush to existing brush group
@@ -340,6 +333,29 @@ function createScatterplot() {
         .duration(200)
         .style("fill-opacity", 0.7)
         .attr("r", (d) => rScale(d.totalLines));
+    })
+    .on("click", (event, commit) => {
+      // Toggle selection for the clicked commit
+      if (selectedCommits.includes(commit)) {
+        selectedCommits = selectedCommits.filter((c) => c !== commit);
+      } else {
+        selectedCommits = [...selectedCommits, commit];
+      }
+
+      // Update visual selection
+      mainGroup
+        .selectAll("circle")
+        .classed("selected", (d) => selectedCommits.includes(d));
+
+      // Update selection stats
+      updateSelectionCount();
+      updateLanguageBreakdown();
+
+      // Update visual state of this circle
+      d3.select(event.target).classed(
+        "selected",
+        selectedCommits.includes(commit)
+      );
     });
 
   // Create and add brush
