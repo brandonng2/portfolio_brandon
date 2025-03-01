@@ -298,21 +298,34 @@ img {
 
 /*=============== CHART ELEMENTS ===============*/
 circle {
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, r 0.3s ease;
     transform-origin: center;
     transform-box: fill-box;
-}
+  }
+  
+  circle:hover {
+    transform: scale(1.2);
+  }
 
-circle:hover {
-    transform: scale(1.5);
-}
-
-@keyframes marching-ants {
+  @starting-style {
+    r: 0;
+  }
+  
+  @keyframes circle-enter {
+    from { r: 0; }
+    to { r: var(--r); }
+  }
+  
+  circle.entering {
+    animation: circle-enter 500ms forwards;
+  }
+  
+  @keyframes marching-ants {
     to {
       stroke-dashoffset: -8; /* 5 + 3 */
     }
   }
-  
+    
 .selection {
     fill-opacity: 0.1;
     stroke: black;
@@ -320,7 +333,7 @@ circle:hover {
     stroke-dasharray: 5 3;
     animation: marching-ants 2s linear infinite;
 }
-  
+    
 circle.selected {
     fill: #ff6b6b;
 }
@@ -367,6 +380,30 @@ circle.selected {
 .footer__copy {
     color: var(--title-color);
     font-size: var(--smaller-font-size);
+}
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.filter-container label {
+    display: flex;
+    align-items: baseline;
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+}
+
+#time-slider {
+    margin: 0 1rem;
+    width: 300px;
+}
+
+#selectedTime {
+    margin-left: auto;
+    font-weight: var(--font-medium);
+    color: var(--title-color-dark);
 }
 
 /*=============== RESPONSIVE STYLES ===============*/

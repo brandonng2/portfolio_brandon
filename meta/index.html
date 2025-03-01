@@ -16,6 +16,12 @@
         <section class="meta section" id="meta">
             <h1 class="section__title">Meta Analysis</h1>
             <span class="section__subtitle">Repository Analytics</span>
+            <div class="filter-container">
+                <label for="time-slider">Show commits until: 
+                    <input type="range" id="time-slider" min="0" max="100" value="100">
+                    <time id="selectedTime"></time>
+                </label>
+            </div>
             <div class="stats__container">
                 <div id="stats"></div>
             </div>
