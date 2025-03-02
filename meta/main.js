@@ -4,6 +4,8 @@ let commits = [];
 let filteredCommits = [];
 let xScale, yScale;
 let selectedCommits = [];
+let files = [];
+let fileTypeColors = d3.scaleOrdinal(d3.schemeTableau10);
 
 // Define dimensions
 const width = 1000;
@@ -156,18 +158,16 @@ function displayStats() {
   // Use filteredCommits instead of commits
   const container = d3.select("#stats");
   container.html(""); // Clear existing content
-  container.append("h2").attr("class", "summary__title").text("Summary");
 
   const dl = container.append("dl").attr("class", "stats");
 
   const numFiles = d3.group(data, (d) => d.file).size;
-  const maxDepth = d3.max(data, (d) => d.depth);
   const maxLineLength = d3.max(data, (d) => d.length);
   const maxLines = d3.max(data, (d) => d.line);
   const avgLineLength = Math.round(d3.mean(data, (d) => d.length));
 
   const workByPeriod = d3.rollups(
-    filteredCommits, // Use filteredCommits instead of commits
+    filteredCommits,
     (v) => v.length,
     (d) => {
       const hour = d.datetime.getHours();
@@ -178,19 +178,12 @@ function displayStats() {
     }
   );
 
-  // Check if workByPeriod has entries before finding max
-  const maxPeriod = workByPeriod.length
-    ? d3.greatest(workByPeriod, (d) => d[1])[0]
-    : "N/A";
-
   const stats = [
-    { label: "Commits", value: filteredCommits.length }, // Use filteredCommits count
+    { label: "Commits", value: filteredCommits.length },
     { label: "Files", value: numFiles },
     { label: "Total LOC", value: data.length },
-    { label: "Max Depth", value: maxDepth },
     { label: "Longest Line", value: maxLineLength },
     { label: "Max Lines", value: maxLines },
-    { label: "Most Active", value: maxPeriod },
     { label: "Avg Length", value: avgLineLength },
   ];
 
@@ -200,11 +193,71 @@ function displayStats() {
   });
 }
 
-function getTimeColor(hour) {
-  if (hour < 6) return "#2c5282"; // Deep blue for night
-  if (hour < 12) return "#ed8936"; // Orange for morning
-  if (hour < 18) return "#ecc94b"; // Yellow for afternoon
-  return "#4299e1"; // Light blue for evening
+// New function to display file information with unit visualization
+function displayFiles() {
+  // Get lines from filtered commits
+  let lines = filteredCommits.flatMap((d) => d.lines);
+
+  // Group by file and create a file list
+  files = d3
+    .groups(lines, (d) => d.file)
+    .map(([name, lines]) => {
+      return { name, lines };
+    })
+    .sort((a, b) => b.lines.length - a.lines.length); // Sort by number of lines (largest first)
+
+  // Select the container (create if it doesn't exist)
+  let filesSection = d3.select("#files-section");
+  if (filesSection.empty()) {
+    // Create the section if it doesn't exist
+    filesSection = d3
+      .select("body")
+      .insert("section", ".footer") // Insert before footer
+      .attr("id", "files-section")
+      .attr("class", "section");
+
+    filesSection.append("h2").attr("class", "section__title");
+
+    filesSection.append("dl").attr("class", "files container");
+  }
+
+  // Clear existing content and repopulate
+  d3.select(".files").selectAll("div").remove();
+  updateFilesDisplay(files);
+}
+
+// Helper function to update files display for selections with unit visualization
+function updateFilesDisplay(filesList) {
+  d3.select(".files").selectAll("div").remove();
+
+  let filesContainer = d3
+    .select(".files")
+    .selectAll("div")
+    .data(filesList)
+    .enter()
+    .append("div");
+
+  // Add filename with line count
+  filesContainer
+    .append("dt")
+    .attr("style", "grid-column: 1")
+    .html(
+      (d) => `<code>${d.name}</code><small>${d.lines.length} lines</small>`
+    );
+
+  // Create container for dots
+  const ddElements = filesContainer
+    .append("dd")
+    .attr("style", "grid-column: 2");
+
+  // Add individual dots for each line - now using the fileTypeColors scale
+  ddElements
+    .selectAll("div.line")
+    .data((d) => d.lines)
+    .enter()
+    .append("div")
+    .attr("class", "line")
+    .style("background", (d) => fileTypeColors(d.type));
 }
 
 // Create brush function
@@ -233,6 +286,20 @@ function brushed(event) {
   // Update selection stats
   updateSelectionCount();
   updateLanguageBreakdown();
+  // Update files display based on selection
+  if (selectedCommits.length > 0) {
+    const selectedLines = selectedCommits.flatMap((d) => d.lines);
+    const selectedFiles = d3
+      .groups(selectedLines, (d) => d.file)
+      .map(([name, lines]) => ({ name, lines }))
+      .sort((a, b) => b.lines.length - a.lines.length);
+
+    // Update files display with selected files
+    updateFilesDisplay(selectedFiles);
+  } else {
+    // If no selection, show all files
+    displayFiles();
+  }
 }
 
 function createBrush(svg) {
@@ -257,6 +324,7 @@ function updateTimeDisplay() {
   filterCommitsByTime();
   updateScatterplot(filteredCommits);
   displayStats();
+  displayFiles(); // Add display files call
 }
 
 function filterCommitsByTime() {
@@ -478,6 +546,19 @@ function updateScatterplot(filteredData) {
       // Update selection stats
       updateSelectionCount();
       updateLanguageBreakdown();
+
+      // Update files display based on selection
+      if (selectedCommits.length > 0) {
+        const selectedLines = selectedCommits.flatMap((d) => d.lines);
+        const selectedFiles = d3
+          .groups(selectedLines, (d) => d.file)
+          .map(([name, lines]) => ({ name, lines }))
+          .sort((a, b) => b.lines.length - a.lines.length);
+
+        updateFilesDisplay(selectedFiles);
+      } else {
+        displayFiles();
+      }
     });
 
   // Update brush
@@ -527,12 +608,18 @@ function updateScatterplot(filteredData) {
   }
 }
 
+function getTimeColor(hour) {
+  if (hour < 6) return "#2c5282"; // Deep blue for night
+  if (hour < 12) return "#ed8936"; // Orange for morning
+  if (hour < 18) return "#ecc94b"; // Yellow for afternoon
+  return "#4299e1"; // Light blue for evening
+}
+
 // Update the loadData function
 async function loadData() {
   data = await d3.csv("loc.csv", (row) => ({
     ...row,
     line: Number(row.line),
-    depth: Number(row.depth),
     length: Number(row.length),
     date: new Date(row.date + "T00:00" + row.timezone),
     datetime: new Date(row.datetime),

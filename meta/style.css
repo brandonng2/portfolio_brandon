@@ -95,7 +95,7 @@ img {
 
 /*=============== REUSABLE CLASSES ===============*/
 .container {
-    max-width: 968px;
+    max-width: 1200px;
     margin-inline: auto;
     padding-inline: 1rem;
 }
@@ -113,13 +113,35 @@ img {
     font-size: var(--h1-font-size);
     color: var(--title-color);
     text-align: center;
+    margin-bottom: 0.5rem;
 }
 
 .section__subtitle {
     display: block;
     font-size: var(--small-font-size);
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
     text-align: center;
+}
+
+/* Card styling for consistent containers */
+.card {
+    background-color: var(--container-color);
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.card h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--title-color);
 }
 
 /*=============== HEADER & NAV ===============*/
@@ -139,8 +161,8 @@ img {
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
-    max-width: 100ch;
-    margin-inline: max(1em, (100% - 100ch) / 2);
+    max-width: 1200px;
+    margin-inline: auto;
 }
 
 .nav__logo {
@@ -152,7 +174,7 @@ img {
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .nav__list {
@@ -164,18 +186,20 @@ img {
 }
 
 .nav__link {
-    padding: 0.5em;
+    padding: 0.5em 0.8em;
     font-weight: var(--font-medium);
     position: relative;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .nav__link::after {
     content: '';
     position: absolute;
     width: 100%;
-    height: 0.4em;
+    height: 3px;
     background: transparent;
-    bottom: 0;
+    bottom: -2px;
     left: 0;
     transition: all 0.3s ease;
 }
@@ -194,60 +218,233 @@ img {
 }
 
 .active-link {
-    padding-bottom: 0.1em;
+    color: var(--color-accent);
+}
+
+/*=============== META LAYOUT ===============*/
+.meta .container-layout {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
+/* Updated filter container styling */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 3rem;
+    max-width: 600px;
+    position: relative;
+    padding-bottom: 1.5rem; /* Space for the time element */
+}
+
+#chart .filter-container {
+    flex: 1;
+    margin-bottom: 1rem;
+}
+
+.filter-container label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.filter-container label span {
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+}
+
+#time-slider {
+    flex: 1;
+    margin: 0 1rem;
+    height: 6px;
+    appearance: none;
+    background: linear-gradient(to right, var(--color-accent), #ddd);
+    border-radius: 3px;
+    outline: none;
+}
+
+#selectedTime {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-weight: var(--font-medium);
+    color: var(--title-color-dark);
+}
+
+/* Style the slider thumb */
+#time-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#time-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: none;
+}
+
+#time-slider::-webkit-slider-thumb:hover,
+#time-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Fix summary statistics container */
+#stats {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+    text-align: center;
+}
+
+/*=============== FILES SECTION ===============*/
+/* Files container */
+.files-container {
+    height: 100%;
+}
+
+/* File list styling */
+.files {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    column-gap: 0.75rem;
+    row-gap: 0.75rem;
+    margin: 0;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Scrollbar styling for files list */
+.files::-webkit-scrollbar {
+    width: 6px;
+}
+
+.files::-webkit-scrollbar-track {
+    background: var(--body-color);
+    border-radius: 3px;
+}
+
+.files::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 3px;
+}
+
+.files > div {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 0.75rem;
+}
+
+.files > div:last-child {
+    border-bottom: none;
+}
+
+.files dt code {
+    font-family: monospace;
+    font-size: var(--small-font-size);
+    background-color: var(--body-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    transition: background-color 0.2s;
+}
+
+.files dt code:hover {
+    background-color: oklch(from var(--color-accent) 95% 5% h);
+}
+
+.files dt small {
+    display: block;
+    font-size: var(--tiny-font-size);
+    opacity: 0.7;
+    margin-top: 0.25rem;
+    font-weight: normal;
+}
+
+.files dd {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    align-content: start;
+    gap: 0.15em;
+    padding-top: 0.6em;
+    margin-left: 0;
+}
+
+/* File line dots styling */
+.line {
+    display: flex;
+    width: 0.5em;
+    aspect-ratio: 1;
+    background: var(--color-accent);
+    border-radius: 50%;
+    transition: transform 0.2s ease-out, background-color 0.2s;
+}
+
+.line:hover {
+    transform: scale(1.5);
+    background-color: oklch(from var(--color-accent) l c h + 15%);
+}
+
+/*=============== DATA CONTAINER ===============*/
+.data-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 /*=============== STATS SECTION ===============*/
-.stats__container {
-    max-width: 900px;
-    margin: 2rem auto 3rem;
-    padding: 2rem;
-    background-color: var(--container-color);
-    border-radius: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .stats {
-    margin-top: 1.5rem;
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 0.75rem;
     text-align: center;
+    padding: 0.5rem;
 }
 
 .stats dt {
     grid-row: 1;
     font-weight: var(--font-medium);
     color: var(--title-color);
-    font-size: var(--small-font-size);
+    font-size: var(--smaller-font-size);
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .stats dd {
     grid-row: 2;
     margin: 0;
-    font-size: var(--h3-font-size);
+    font-size: var(--normal-font-size);
     color: var(--title-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*=============== CHART SECTION ===============*/
-.chart-container {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: var(--container-color);
-    border-radius: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.chart-container h2 {
-    margin-bottom: 2rem;
-    text-align: center;
-    color: var(--title-color);
-}
-
 #chart {
     width: 100%;
-    height: 100%;
+    height: 250px;
     overflow: visible;
 }
 
@@ -260,6 +457,17 @@ img {
     display: none;
 }
 
+#selection-count {
+    text-align: center;
+    margin-top: 7rem;
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+}
+
+#language-breakdown {
+    margin-top: 1.5rem;
+}
+
 /*=============== TOOLTIP ===============*/
 .tooltip {
     position: fixed;
@@ -268,8 +476,17 @@ img {
     background: var(--container-color);
     padding: 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: var(--z-tooltip);
+    max-width: 300px;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transform: translateY(0);
+}
+
+.tooltip[hidden] {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
 }
 
 .info {
@@ -277,12 +494,6 @@ img {
     grid-template-columns: auto 1fr;
     gap: 0.5rem 1rem;
     margin: 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.info[hidden] {
-    opacity: 0;
-    visibility: hidden;
 }
 
 .info dt {
@@ -294,6 +505,16 @@ img {
     margin: 0;
     font-weight: var(--font-medium);
     color: var(--title-color);
+    word-break: break-word;
+}
+
+.info dd a {
+    color: var(--color-accent);
+    transition: color 0.2s;
+}
+
+.info dd a:hover {
+    text-decoration: underline;
 }
 
 /*=============== CHART ELEMENTS ===============*/
@@ -301,34 +522,34 @@ circle {
     transition: transform 0.2s ease, r 0.3s ease;
     transform-origin: center;
     transform-box: fill-box;
-  }
+}
   
-  circle:hover {
+circle:hover {
     transform: scale(1.2);
-  }
+}
 
-  @starting-style {
+@starting-style {
     r: 0;
-  }
+}
   
-  @keyframes circle-enter {
+@keyframes circle-enter {
     from { r: 0; }
     to { r: var(--r); }
-  }
+}
   
-  circle.entering {
+circle.entering {
     animation: circle-enter 500ms forwards;
-  }
+}
   
-  @keyframes marching-ants {
+@keyframes marching-ants {
     to {
-      stroke-dashoffset: -8; /* 5 + 3 */
+        stroke-dashoffset: -8; /* 5 + 3 */
     }
-  }
+}
     
 .selection {
     fill-opacity: 0.1;
-    stroke: black;
+    stroke: var(--title-color);
     stroke-opacity: 0.7;
     stroke-dasharray: 5 3;
     animation: marching-ants 2s linear infinite;
@@ -342,16 +563,17 @@ circle.selected {
 .footer {
     background-color: var(--container-color);
     border-top: 1px solid var(--border-color);
-    padding: 2rem 0;
+    padding: 3rem 0;
     margin-top: 4rem;
 }
 
 .footer__container {
     text-align: center;
+    max-width: 768px;
 }
 
 .footer__title {
-    font-size: var(--h1-font-size);
+    font-size: var(--h2-font-size);
     font-weight: var(--font-semi-bold);
     margin-bottom: 2rem;
 }
@@ -366,15 +588,16 @@ circle.selected {
 .footer__social-icon {
     background-color: var(--title-color);
     color: var(--container-color);
-    font-size: 1.125rem;
-    padding: 0.4rem;
+    font-size: 1.25rem;
+    padding: 0.5rem;
     border-radius: 0.5rem;
     display: inline-flex;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .footer__social-icon:hover {
-    background-color: var(--title-color-dark);
+    background-color: var(--color-accent);
+    transform: translateY(-3px);
 }
 
 .footer__copy {
@@ -382,32 +605,37 @@ circle.selected {
     font-size: var(--smaller-font-size);
 }
 
-.filter-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-.filter-container label {
-    display: flex;
-    align-items: baseline;
-    font-weight: var(--font-medium);
-    color: var(--title-color);
-}
-
-#time-slider {
-    margin: 0 1rem;
-    width: 300px;
-}
-
-#selectedTime {
-    margin-left: auto;
-    font-weight: var(--font-medium);
-    color: var(--title-color-dark);
-}
-
 /*=============== RESPONSIVE STYLES ===============*/
+@media screen and (min-width: 576px) {
+    .filter-container label {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .container {
+        margin-inline: 1.5rem;
+    }
+
+    .meta .container-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .files-container, .stats__container, .chart-container {
+        margin-bottom: 0;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .section {
+        padding: 4rem 0 1rem;
+    }
+
+    .section__subtitle {
+        margin-bottom: 2rem;
+    }
+    
     .nav__menu {
         position: fixed;
         bottom: -100%;
@@ -429,24 +657,31 @@ circle.selected {
     .show-menu {
         bottom: 0;
     }
-
-    .container {
-        padding-inline: 1.5rem;
+    
+    /* Adjust filter container for mobile */
+    .filter-container {
+        padding-bottom: 1.5rem;
+    }
+    
+    #selectedTime {
+        position: absolute;
+        bottom: 0;
+        right: 0;
     }
 }
 
 @media screen and (max-width: 576px) {
     .stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+        gap: 1rem;
     }
-
-    .section {
-        padding: 4rem 0 1rem;
+    
+    #chart {
+        height: 200px;
     }
-
-    .section__subtitle {
-        margin-bottom: 2rem;
+    
+    .files {
+        max-height: 400px;
     }
 }
 

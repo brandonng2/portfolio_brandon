@@ -16,21 +16,42 @@
         <section class="meta section" id="meta">
             <h1 class="section__title">Meta Analysis</h1>
             <span class="section__subtitle">Repository Analytics</span>
+            
             <div class="filter-container">
-                <label for="time-slider">Show commits until: 
+                <label for="time-slider">
+                    <span>Show commits until:</span>
                     <input type="range" id="time-slider" min="0" max="100" value="100">
-                    <time id="selectedTime"></time>
+                    <time id="selectedTime">Current Date</time>
                 </label>
             </div>
-            <div class="stats__container">
-                <div id="stats"></div>
+            
+            <div class="container-layout">
+                <!-- Files on the left side -->
+                <div class="files-container card">
+                    <h2>Repository Files</h2>
+                    <dl class="files">
+                        <!-- Files will be populated here -->
+                    </dl>
+                </div>
+                
+                <!-- Stats and chart on the right side -->
+                <div class="data-container">
+                    <div class="stats__container card">
+                        <h2>Summary Statistics</h2>
+                        <div id="stats">
+                            <!-- Stats will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container card">
+                        <h2>Commits by Time of Day</h2>
+                        <div id="chart"></div>
+                        <p id="selection-count">No commits selected</p>
+                        <dl id="language-breakdown" class="stats"></dl>
+                    </div>
+                </div>
             </div>
-            <div class="chart-container">
-                <h2>Commits by Time of Day</h2>
-                <div id="chart"></div>
-                <p id="selection-count">No commits selected</p>
-                <dl id="language-breakdown" class="stats"></dl>
-            </div>
+            
             <dl id="commit-tooltip" class="info tooltip" hidden>
                 <dt>Commit</dt>
                 <dd>
@@ -47,6 +68,7 @@
             </dl>
         </section>
     </main>
+    
     <footer class="footer">
         <div class="footer__container container">
             <h3 class="footer__title">Brandon Ng</h3>
@@ -71,8 +93,9 @@
             <span class="footer__copy">&copy; 2024 Brandon Ng. All rights reserved</span>
         </div>
     </footer>
+    
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="./main.js"></script>
     <script src="../global.js" type="module"></script>
 </body>
-</html
+</html>
