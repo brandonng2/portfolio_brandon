@@ -63,6 +63,8 @@ body {
     background-color: var(--body-color);
     color: var(--text-color);
     line-height: 1.6;
+    max-width: min(120ch, 80vw);
+    margin: 0 auto;
 }
 
 h1, h2, h3 {
@@ -221,99 +223,46 @@ img {
     color: var(--color-accent);
 }
 
-/*=============== META LAYOUT ===============*/
-.meta .container-layout {
+/*=============== GRID LAYOUT ===============*/
+.grid-container {
     display: grid;
-    grid-template-columns: 45% 55%;
+    grid-template-columns: 1fr 2fr; /* Left column takes 1/3, right column takes 2/3 */
+    grid-template-rows: auto 1fr; /* First row auto height, second row takes remaining space */
     gap: 2rem;
-    max-width: 1200px;
     margin: 0 auto 2rem;
+    max-width: 1200px;
 }
 
-/* Updated filter container styling */
-.filter-container {
-    display: flex;
-    justify-content: center;
-    margin: 0 auto 3rem;
-    max-width: 600px;
-    position: relative;
-    padding-bottom: 1.5rem; /* Space for the time element */
+/* Position each card in the grid */
+.files-container {
+    grid-column: 1;
+    grid-row: 1;
+    max-height: 400px;
 }
 
-#chart .filter-container {
-    flex: 1;
-    margin-bottom: 1rem;
+.stats__container {
+    grid-column: 2;
+    grid-row: 1;
+    max-height: 250px; /* Limit the height of stats to make chart bigger */
 }
 
-.filter-container label {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
+.scrolly-container {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 400px;
 }
 
-.filter-container label span {
-    font-weight: var(--font-medium);
-    color: var(--title-color);
-}
-
-#time-slider {
-    flex: 1;
-    margin: 0 1rem;
-    height: 6px;
-    appearance: none;
-    background: linear-gradient(to right, var(--color-accent), #ddd);
-    border-radius: 3px;
-    outline: none;
-}
-
-#selectedTime {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-weight: var(--font-medium);
-    color: var(--title-color-dark);
-}
-
-/* Style the slider thumb */
-#time-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--color-accent);
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-#time-slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--color-accent);
-    cursor: pointer;
-    transition: transform 0.2s;
-    border: none;
-}
-
-#time-slider::-webkit-slider-thumb:hover,
-#time-slider::-moz-range-thumb:hover {
-    transform: scale(1.2);
-}
-
-/* Fix summary statistics container */
-#stats {
-    margin-top: 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 1rem;
-    text-align: center;
+.chart-container {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 450px; /* Give the chart more vertical space */
 }
 
 /*=============== FILES SECTION ===============*/
-/* Files container */
 .files-container {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 /* File list styling */
@@ -323,7 +272,7 @@ img {
     column-gap: 0.75rem;
     row-gap: 0.75rem;
     margin: 0;
-    max-height: 600px;
+    max-height: 300px;
     overflow-y: auto;
     padding-right: 0.5rem;
 }
@@ -404,17 +353,15 @@ img {
     background-color: oklch(from var(--color-accent) l c h + 15%);
 }
 
-/*=============== DATA CONTAINER ===============*/
-.data-container {
+/*=============== STATS SECTION ===============*/
+.stats__container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
 }
 
-/*=============== STATS SECTION ===============*/
 .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
     gap: 0.75rem;
     text-align: center;
     padding: 0.5rem;
@@ -441,10 +388,166 @@ img {
     text-overflow: ellipsis;
 }
 
-/*=============== CHART SECTION ===============*/
-#chart {
+/*=============== TIME SLIDER STYLES ===============*/
+/* Time slider styles */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    margin-top: 1rem;
+}
+
+.filter-container label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
-    height: 250px;
+}
+
+.filter-container label span {
+    white-space: nowrap;
+    margin-right: 1rem;
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+}
+
+#time-slider {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0 1rem;
+    background: linear-gradient(to right, var(--color-accent), #ddd);
+    border-radius: 3px;
+}
+
+#time-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#time-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: none;
+}
+
+#time-slider::-webkit-slider-thumb:hover,
+#time-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+}
+
+#selectedTime {
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+    margin-left: 0.5rem;
+    white-space: nowrap;
+}
+
+/*=============== COMMITS BY DAY STYLING ===============*/
+.scrolly-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#scrollytelling {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#scroll-container {
+    height: auto;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: var(--body-color);
+    border-radius: 0.5rem;
+    padding: 0;
+    border: 1px solid var(--border-color);
+}
+
+#scroll-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#scroll-container::-webkit-scrollbar-track {
+    background: var(--body-color);
+    border-radius: 3px;
+}
+
+#scroll-container::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 3px;
+}
+
+.all-commits-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.item {
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--container-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.item:hover, .item.highlighted {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    background-color: oklch(from var(--color-accent) 98% 2% h);
+}
+
+.item p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.item a {
+    color: var(--color-accent);
+    font-weight: var(--font-medium);
+}
+
+.item a:hover {
+    text-decoration: underline;
+}
+
+.item code {
+    font-family: monospace;
+    font-size: var(--small-font-size);
+    background-color: var(--body-color);
+    padding: 0.1rem 0.25rem;
+    border-radius: 0.25rem;
+    margin: 0 2px;
+}
+
+/*=============== CHART SECTION ===============*/
+.chart-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#chart {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
     overflow: visible;
 }
 
@@ -459,13 +562,13 @@ img {
 
 #selection-count {
     text-align: center;
-    margin-top: 7rem;
+    margin-top: 1rem;
     font-weight: var(--font-medium);
     color: var(--title-color);
 }
 
 #language-breakdown {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 }
 
 /*=============== TOOLTIP ===============*/
@@ -519,17 +622,13 @@ img {
 
 /*=============== CHART ELEMENTS ===============*/
 circle {
-    transition: transform 0.2s ease, r 0.3s ease;
+    transition: transform 0.2s ease, r 0.3s ease, fill-opacity 0.2s, stroke 0.2s, stroke-width 0.2s;
     transform-origin: center;
     transform-box: fill-box;
 }
   
 circle:hover {
     transform: scale(1.2);
-}
-
-@starting-style {
-    r: 0;
 }
   
 @keyframes circle-enter {
@@ -606,24 +705,39 @@ circle.selected {
 }
 
 /*=============== RESPONSIVE STYLES ===============*/
-@media screen and (min-width: 576px) {
-    .filter-container label {
-        flex-direction: row;
-        align-items: center;
-    }
-}
-
 @media screen and (max-width: 992px) {
-    .container {
-        margin-inline: 1.5rem;
+    body {
+        max-width: 100ch;
     }
 
-    .meta .container-layout {
+    .grid-container {
         grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+        gap: 1.5rem;
     }
     
-    .files-container, .stats__container, .chart-container {
-        margin-bottom: 0;
+    .files-container {
+        grid-column: 1;
+        grid-row: 1;
+        max-height: none;
+    }
+    
+    .stats__container {
+        grid-column: 1;
+        grid-row: 2;
+        max-height: none;
+    }
+    
+    .scrolly-container {
+        grid-column: 1;
+        grid-row: 3;
+        min-height: 350px;
+    }
+    
+    .chart-container {
+        grid-column: 1;
+        grid-row: 4;
+        min-height: 400px;
     }
 }
 
@@ -636,37 +750,16 @@ circle.selected {
         margin-bottom: 2rem;
     }
     
-    .nav__menu {
-        position: fixed;
-        bottom: -100%;
-        left: 0;
-        width: 100%;
-        background-color: var(--body-color);
-        padding: 2rem 1.5rem 4rem;
-        box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.15);
-        border-radius: 1.5rem 1.5rem 0 0;
-        transition: 0.3s;
-        gap: 2rem;
-        flex-direction: column;
+    #scroll-container {
+        height: 250px;
     }
 
-    .nav__link {
-        padding: 0.75em;
-    }
-
-    .show-menu {
-        bottom: 0;
+    .grid-container {
+        gap: 1rem;
     }
     
-    /* Adjust filter container for mobile */
-    .filter-container {
-        padding-bottom: 1.5rem;
-    }
-    
-    #selectedTime {
-        position: absolute;
-        bottom: 0;
-        right: 0;
+    .card {
+        padding: 1.5rem;
     }
 }
 
@@ -677,20 +770,32 @@ circle.selected {
     }
     
     #chart {
-        height: 200px;
+        min-height: 250px;
     }
     
     .files {
-        max-height: 400px;
+        max-height: 250px;
+    }
+    
+    #scroll-container {
+        height: 200px;
+    }
+    
+    .card h2 {
+        font-size: 1.2rem;
     }
 }
 
 @media screen and (max-width: 350px) {
-    .container {
-        margin-inline: 1rem;
+    body {
+        max-width: 95%;
     }
 
     .stats {
         grid-template-columns: 1fr;
+    }
+    
+    .card {
+        padding: 1rem;
     }
 }

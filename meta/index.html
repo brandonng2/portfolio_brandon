@@ -17,38 +17,40 @@
             <h1 class="section__title">Meta Analysis</h1>
             <span class="section__subtitle">Repository Analytics</span>
             
-            <div class="filter-container">
-                <label for="time-slider">
-                    <span>Show commits until:</span>
-                    <input type="range" id="time-slider" min="0" max="100" value="100">
-                    <time id="selectedTime">Current Date</time>
-                </label>
-            </div>
-            
-            <div class="container-layout">
-                <!-- Files on the left side -->
-                <div class="files-container card">
+            <div class="grid-container">
+                <!-- Top Left: Files -->
+                <div class="files-container card grid-item">
                     <h2>Repository Files</h2>
                     <dl class="files">
                         <!-- Files will be populated here -->
                     </dl>
                 </div>
                 
-                <!-- Stats and chart on the right side -->
-                <div class="data-container">
-                    <div class="stats__container card">
-                        <h2>Summary Statistics</h2>
-                        <div id="stats">
-                            <!-- Stats will be populated here -->
+                <!-- Top Right: Stats -->
+                <div class="stats__container card grid-item">
+                    <h2>Summary Statistics</h2>
+                    <div id="stats">
+                        <!-- Stats will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Bottom Left: Scrollytelling Commits -->
+                <div class="scrolly-container card grid-item">
+                    <h2>Commits by Day</h2>
+                    <div id="scrollytelling">
+                        <div id="scroll-container">
+                            <div id="spacer"></div>
+                            <div id="items-container"></div>
                         </div>
                     </div>
-                    
-                    <div class="chart-container card">
-                        <h2>Commits by Time of Day</h2>
-                        <div id="chart"></div>
-                        <p id="selection-count">No commits selected</p>
-                        <dl id="language-breakdown" class="stats"></dl>
-                    </div>
+                </div>
+                
+                <!-- Bottom Right: Chart -->
+                <div class="chart-container card grid-item">
+                    <h2>Commits by Time of Day</h2>
+                    <div id="chart"></div>
+                    <p id="selection-count">No commits selected</p>
+                    <dl id="language-breakdown" class="stats"></dl>
                 </div>
             </div>
             
