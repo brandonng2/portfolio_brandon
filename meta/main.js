@@ -1,3 +1,96 @@
+// Load data and initialize visualization
+async function loadData() {
+  try {
+    data = await d3.csv("loc.csv", (row) => ({
+      ...row,
+      line: Number(row.line),
+      length: Number(row.length),
+      date: new Date(row.date + "T00:00" + row.timezone),
+      datetime: new Date(row.datetime),
+    }));
+
+    console.log(`Loaded ${data.length} rows of data`);
+
+    processCommits();
+    console.log(`Processed ${commits.length} unique commits`);
+
+    // Initialize scroll event listener for transitions
+    window.addEventListener(
+      "scroll",
+      debounce(() => {
+        checkVisibleCommits();
+      }, 100)
+    );
+
+    // Initial update to display everything
+    updateScatterplot(filteredCommits);
+    displayStats();
+    displayCommitFiles();
+
+    // Display all commits
+    displayAllCommits();
+
+    // Setup time slider
+    setupTimeSlider();
+  } catch (error) {
+    console.error("Error loading or processing data:", error);
+  }
+}
+
+// Check which commits are currently visible
+function checkVisibleCommits() {
+  // We'll use this instead of IntersectionObserver for compatibility
+  const items = document.querySelectorAll(".item");
+  const visibleItems = [];
+
+  // Get current scroll position
+  const scrollPosition = window.scrollY;
+  const viewportHeight = window.innerHeight;
+
+  // Check if any day sections are in view
+  const daySections = document.querySelectorAll(".day-section");
+  const visibleDays = [];
+
+  daySections.forEach((section) => {
+    const rect = section.getBoundingClientRect();
+    // Check if the section is at least partially visible
+    if (rect.top < viewportHeight && rect.bottom > 0) {
+      visibleDays.push(section.getAttribute("data-day"));
+    }
+  });
+
+  // Get all commits from visible days
+  if (visibleDays.length > 0) {
+    const commitsToHighlight = filteredCommits.filter((c) =>
+      visibleDays.includes(c.day)
+    );
+
+    // Determine scroll direction
+    const scrollingDown = scrollPosition > lastScrollY;
+    lastScrollY = scrollPosition;
+
+    // Update the scatterplot with transitions
+    updateScatterplotWithTransition(commitsToHighlight, scrollingDown);
+  }
+}
+
+// Simple debounce function to prevent too many scroll events
+function debounce(func, wait) {
+  let timeout;
+  return function () {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(context, args);
+    }, wait);
+  };
+}
+
+// Document ready handler
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadData();
+});
 // Global variables
 let data = [];
 let commits = [];
@@ -6,6 +99,8 @@ let xScale, yScale;
 let selectedCommits = [];
 let files = [];
 let fileTypeColors = d3.scaleOrdinal(d3.schemeTableau10);
+let visibleCommits = []; // Track currently visible commits
+let lastScrollY = 0; // Track last scroll position
 
 // Define dimensions
 const width = 1000;
@@ -138,6 +233,7 @@ function processCommits() {
         datetime,
         hourFrac: datetime.getHours() + datetime.getMinutes() / 60,
         totalLines: lines.length,
+        day: datetime.toISOString().split("T")[0], // Add day for grouping
       };
 
       Object.defineProperty(ret, "lines", {
@@ -171,6 +267,9 @@ function processCommits() {
 
   // Set filteredCommits to all commits initially (by default show all)
   filterCommitsByTime();
+
+  // Initialize visibleCommits to empty array
+  visibleCommits = [];
 
   console.log(`After filtering: ${filteredCommits.length} commits to display`);
 }
@@ -296,124 +395,199 @@ function filterCommitsByTime() {
   selectedCommits = [];
   updateSelectionCount();
   updateLanguageBreakdown();
+
+  // Reset visible commits when filter changes
+  visibleCommits = [];
 }
 
-// Display all commits at once instead of scrolling
+// Display all commits with scroll detection
 function displayAllCommits() {
   // Get the container and clear its contents
   const container = d3.select("#scroll-container");
   container.html("");
 
-  // Create a container for all commits
+  // Group commits by day
+  const commitsByDay = d3.group(filteredCommits, (d) => d.day);
+
+  // Sort days chronologically
+  const sortedDays = Array.from(commitsByDay.keys()).sort();
+
+  // Create a container for all days
   const allCommitsContainer = container
     .append("div")
     .attr("class", "all-commits-container");
 
-  // Add all filtered commits
-  allCommitsContainer
-    .selectAll(".item")
-    .data(filteredCommits)
-    .enter()
-    .append("div")
-    .attr("class", "item")
-    .html((d, i) => {
-      // Get files changed in this commit
-      const fileCount = d3.rollups(
-        d.lines,
-        (D) => D.length,
-        (file) => file.file
-      ).length;
-      const fileList = d3
-        .groups(d.lines, (line) => line.file)
-        .map(([filename]) => filename)
-        .slice(0, 3); // Get top 3 files
+  // Add day sections
+  sortedDays.forEach((day) => {
+    const dayCommits = commitsByDay.get(day);
+    const date = new Date(day);
 
-      // Format the timestamp
-      const formattedDate = d.datetime.toLocaleString("en", {
-        dateStyle: "full",
-        timeStyle: "short",
+    // Create a day section
+    const daySection = allCommitsContainer
+      .append("div")
+      .attr("class", "day-section")
+      .attr("data-day", day);
+
+    // Add date header
+    daySection
+      .append("h3")
+      .attr("class", "day-header")
+      .text(
+        date.toLocaleDateString("en", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      );
+
+    // Add all commits for this day
+    daySection
+      .selectAll(".item")
+      .data(dayCommits)
+      .enter()
+      .append("div")
+      .attr("class", "item")
+      .attr("data-commit-id", (d) => d.id)
+      .html((d) => {
+        // Get files changed in this commit
+        const fileCount = d3.rollups(
+          d.lines,
+          (D) => D.length,
+          (file) => file.file
+        ).length;
+        const fileList = d3
+          .groups(d.lines, (line) => line.file)
+          .map(([filename]) => filename)
+          .slice(0, 3); // Get top 3 files
+
+        // Format the timestamp
+        const formattedTime = d.datetime.toLocaleString("en", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        });
+
+        // Create the narrative text
+        return `
+          <p>
+            <span class="commit-time">${formattedTime}</span> 
+            <a href="${d.url}" target="_blank">${d.id.slice(0, 7)}</a> 
+            by ${d.author}. 
+            ${d.totalLines} lines were edited across ${fileCount} ${
+          fileCount === 1 ? "file" : "files"
+        }.
+            ${
+              fileCount > 0
+                ? `Main files: ${fileList
+                    .map((f) => `<code>${f}</code>`)
+                    .join(", ")}`
+                : ""
+            }
+          </p>
+        `;
+      })
+      .on("mouseenter", function (event, d) {
+        // Highlight this commit in the chart
+        updateScatterplotHighlights([d]);
+
+        // Highlight this item
+        d3.select(this).classed("highlighted", true);
+      })
+      .on("mouseleave", function () {
+        // Remove highlights if no selection
+        if (selectedCommits.length === 0) {
+          updateScatterplotHighlights([]);
+        }
+
+        // Remove item highlight
+        d3.select(this).classed("highlighted", false);
+      });
+  });
+
+  // Set up scroll observation
+  setupScrollObserver();
+}
+
+// Create a scroll observer to detect which commits are visible
+function setupScrollObserver() {
+  // First remove any existing observer
+  if (window.commitObserver) {
+    window.commitObserver.disconnect();
+  }
+
+  // Create new observer
+  window.commitObserver = new IntersectionObserver(
+    (entries) => {
+      // Process entries
+      const newlyVisible = [];
+      const newlyHidden = [];
+
+      entries.forEach((entry) => {
+        const commitId = entry.target.getAttribute("data-commit-id");
+        const commit = filteredCommits.find((c) => c.id === commitId);
+
+        if (!commit) return;
+
+        if (entry.isIntersecting) {
+          // Commit just became visible
+          if (!visibleCommits.includes(commit)) {
+            newlyVisible.push(commit);
+          }
+        } else {
+          // Commit just became hidden
+          if (visibleCommits.includes(commit)) {
+            newlyHidden.push(commit);
+          }
+        }
       });
 
-      // Determine if this is the first commit overall
-      const isFirstCommit = d.id === commits[0].id;
+      // Update visibleCommits list
+      visibleCommits = visibleCommits
+        .filter((c) => !newlyHidden.includes(c))
+        .concat(newlyVisible);
 
-      // Create the narrative text
-      return `
-                         <p>
-                           On ${formattedDate}, 
-                           <a href="${d.url}" target="_blank">
-                             ${
-                               isFirstCommit
-                                 ? "the first commit was made"
-                                 : "another commit was made"
-                             }
-                           </a> 
-                           by ${d.author}. 
-                           ${
-                             d.totalLines
-                           } lines were edited across ${fileCount} ${
-        fileCount === 1 ? "file" : "files"
-      }.
-                           ${
-                             fileCount > 0
-                               ? `Main files: ${fileList
-                                   .map((f) => `<code>${f}</code>`)
-                                   .join(", ")}`
-                               : ""
-                           }
-                         </p>
-                       `;
-    })
-    .on("mouseenter", function (event, d) {
-      // Highlight this commit in the chart
-      updateScatterplotHighlights([d]);
+      // Determine scroll direction
+      const scrollY = window.scrollY;
+      const scrollingDown = scrollY > lastScrollY;
+      lastScrollY = scrollY;
 
-      // Highlight this item
-      d3.select(this).classed("highlighted", true);
-    })
-    .on("mouseleave", function () {
-      // Remove highlights if no selection
-      if (selectedCommits.length === 0) {
-        updateScatterplotHighlights([]);
+      // Update the scatterplot with transition based on visible commits
+      if (newlyVisible.length > 0) {
+        updateScatterplotWithActiveDay(scrollingDown);
       }
+    },
+    {
+      threshold: 0.2, // Trigger when 20% of item is visible
+      rootMargin: "-10% 0px -10% 0px", // Add margin to detect items near the viewport
+    }
+  );
 
-      // Remove item highlight
-      d3.select(this).classed("highlighted", false);
-    });
+  // Start observing all commit items
+  document.querySelectorAll(".item").forEach((item) => {
+    window.commitObserver.observe(item);
+  });
+
+  // Also observe day headers
+  document.querySelectorAll(".day-header").forEach((header) => {
+    window.commitObserver.observe(header);
+  });
 }
 
-// Highlight commits in the scatterplot
-function updateScatterplotHighlights(highlights) {
-  // If we have an active selection, don't highlight hover commits
-  if (selectedCommits.length > 0) {
-    return;
-  }
+// Update scatterplot highlighting based on active day
+function updateScatterplotWithActiveDay(scrollingDown) {
+  if (!visibleCommits.length) return;
 
-  // If we have no highlights, reset all circles
-  if (!highlights || highlights.length === 0) {
-    d3.selectAll("circle")
-      .style("fill-opacity", 0.7)
-      .style("stroke", null)
-      .style("stroke-width", null);
-    return;
-  }
+  // Get the day of currently visible commits
+  const visibleDays = new Set(visibleCommits.map((c) => c.day));
 
-  // Otherwise, highlight specific commits and dim others
-  d3.selectAll("circle")
-    .style("fill-opacity", (d) => (highlights.includes(d) ? 1 : 0.3))
-    .style("stroke", (d) => (highlights.includes(d) ? "#fff" : null))
-    .style("stroke-width", (d) => (highlights.includes(d) ? 2 : null));
-}
+  // Get all commits for visible days
+  const commitsToHighlight = filteredCommits.filter((c) =>
+    visibleDays.has(c.day)
+  );
 
-// Highlight a commit in the list view when hovering over its circle
-function highlightCommitInList(commit) {
-  // Remove existing highlights
-  d3.selectAll(".item").classed("highlighted", false);
-
-  // Find the item for this commit and highlight it
-  d3.selectAll(".item")
-    .filter((d) => d && d.id === commit.id)
-    .classed("highlighted", true);
+  // Update the scatterplot with transitions based on scroll direction
+  updateScatterplotWithTransition(commitsToHighlight, scrollingDown);
 }
 
 // Create brush function
@@ -472,6 +646,43 @@ function createScatterplot() {
     height: height - margin.top - margin.bottom,
   };
 
+  // Add our fixed styles for circle transitions
+  if (!document.getElementById("circle-transitions")) {
+    const style = document.createElement("style");
+    style.id = "circle-transitions";
+    style.textContent = `
+      circle {
+        transition: fill 200ms, fill-opacity 200ms, r 300ms ease-out;
+      }
+      
+      circle.active {
+        stroke: white;
+        stroke-width: 2px;
+      }
+      
+      .day-section {
+        margin-bottom: 2rem;
+        padding-top: 0.5rem;
+      }
+      
+      .day-header {
+        position: sticky;
+        top: 0;
+        background: white;
+        margin: 0 0 1rem 0;
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+        z-index: 100;
+      }
+      
+      .commit-time {
+        font-weight: bold;
+        color: #666;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   // Create and set up SVG container
   const svg = d3
     .select("#chart")
@@ -529,6 +740,63 @@ function createScatterplot() {
   return svg;
 }
 
+// Enhanced scatterplot with smooth transitions
+function updateScatterplotWithTransition(highlightCommits, scrollingDown) {
+  // Get existing SVG
+  let svg = d3.select("#chart svg");
+  if (svg.empty()) return;
+
+  const dots = svg.select(".dots");
+
+  // Update active state for all circles
+  dots
+    .selectAll("circle")
+    .classed("active", (d) => highlightCommits.includes(d))
+    .transition()
+    .duration(300)
+    .style("fill-opacity", (d) => (highlightCommits.includes(d) ? 1 : 0.4));
+
+  // Apply special effect for active commits based on scroll direction
+  dots.selectAll("circle.active").each(function () {
+    const circle = d3.select(this);
+    const baseRadius = parseFloat(
+      circle.attr("data-base-radius") || circle.attr("r")
+    );
+
+    circle
+      .transition()
+      .duration(400)
+      .attr("r", baseRadius * 1.3) // Grow the circle
+      .transition()
+      .duration(300)
+      .attr("r", baseRadius); // Return to original size
+  });
+}
+
+// Highlight commits in the scatterplot
+function updateScatterplotHighlights(highlights) {
+  // If we have an active selection, don't highlight hover commits
+  if (selectedCommits.length > 0) {
+    return;
+  }
+
+  // If we have no highlights, reset all circles
+  if (!highlights || highlights.length === 0) {
+    d3.selectAll("circle")
+      .style("fill-opacity", 0.7)
+      .style("stroke", null)
+      .style("stroke-width", null);
+    return;
+  }
+
+  // Otherwise, highlight specific commits and dim others
+  d3.selectAll("circle")
+    .style("fill-opacity", (d) => (highlights.includes(d) ? 1 : 0.3))
+    .style("stroke", (d) => (highlights.includes(d) ? "#fff" : null))
+    .style("stroke-width", (d) => (highlights.includes(d) ? 2 : null));
+}
+
+// Standard scatterplot update function
 function updateScatterplot(filteredData) {
   const margin = { top: 10, right: 10, bottom: 30, left: 40 };
 
@@ -603,26 +871,23 @@ function updateScatterplot(filteredData) {
           .attr("fill", (d) => getTimeColor(d.datetime.getHours()))
           .style("fill-opacity", 0.7)
           .attr("r", 0) // Start with radius 0
-          .style("--r", (d) => rScale(d.totalLines)) // Set CSS variable for transition
-          .classed("entering", true) // Add class for entry animation
+          .attr("data-base-radius", (d) => rScale(d.totalLines)) // Store base radius for animation
           .call((enter) =>
             enter
               .transition()
               .duration(300)
               .attr("r", (d) => rScale(d.totalLines))
-              .on("end", function () {
-                d3.select(this).classed("entering", false);
-              })
           ),
       (update) =>
-        update.call((update) =>
-          update
-            .transition()
-            .duration(300)
-            .attr("cx", (d) => xScale(d.datetime))
-            .attr("cy", (d) => yScale(d.hourFrac))
-            .attr("r", (d) => rScale(d.totalLines))
-            .style("--r", (d) => rScale(d.totalLines))
+        update.call(
+          (update) =>
+            update
+              .transition()
+              .duration(300)
+              .attr("cx", (d) => xScale(d.datetime))
+              .attr("cy", (d) => yScale(d.hourFrac))
+              .attr("r", (d) => rScale(d.totalLines))
+              .attr("data-base-radius", (d) => rScale(d.totalLines)) // Update base radius
         ),
       (exit) =>
         exit.call((exit) =>
@@ -633,7 +898,7 @@ function updateScatterplot(filteredData) {
       updateTooltipContent(commit);
       updateTooltipPosition(event);
 
-      // Highlight this circle and corresponding commit in the list
+      // Highlight this circle
       d3.select(event.target)
         .transition()
         .duration(200)
@@ -646,11 +911,19 @@ function updateScatterplot(filteredData) {
     .on("mousemove", updateTooltipPosition)
     .on("mouseleave", (event) => {
       updateTooltipContent({});
-      d3.select(event.target)
-        .transition()
-        .duration(200)
-        .style("fill-opacity", 0.7)
-        .attr("r", (d) => rScale(d.totalLines));
+
+      // Only reset if not an active commit
+      const isActive = d3.select(event.target).classed("active");
+
+      if (!isActive) {
+        d3.select(event.target)
+          .transition()
+          .duration(200)
+          .style("fill-opacity", 0.7)
+          .attr("r", function () {
+            return d3.select(this).attr("data-base-radius");
+          });
+      }
 
       // Remove highlight from list if no selection
       if (selectedCommits.length === 0) {
@@ -729,6 +1002,35 @@ function updateScatterplot(filteredData) {
   }
 }
 
+// Highlight a commit in the list view when hovering over its circle
+function highlightCommitInList(commit) {
+  // Remove existing highlights
+  d3.selectAll(".item").classed("highlighted", false);
+
+  // Find the item for this commit and highlight it
+  d3.selectAll(".item")
+    .filter((d) => d && d.id === commit.id)
+    .classed("highlighted", true);
+
+  // Scroll to the commit if it's not in view
+  const commitItem = document.querySelector(
+    `.item[data-commit-id="${commit.id}"]`
+  );
+  if (commitItem) {
+    // Check if element is in viewport
+    const rect = commitItem.getBoundingClientRect();
+    const isInViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
+
+    // Scroll into view with behavior smooth if not visible
+    if (!isInViewport) {
+      commitItem.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }
+}
+
 function getTimeColor(hour) {
   if (hour < 6) return "#2c5282"; // Deep blue for night
   if (hour < 12) return "#ed8936"; // Orange for morning
@@ -750,39 +1052,3 @@ function setupTimeSlider() {
     });
   }
 }
-
-// Load data and initialize visualization
-async function loadData() {
-  try {
-    data = await d3.csv("loc.csv", (row) => ({
-      ...row,
-      line: Number(row.line),
-      length: Number(row.length),
-      date: new Date(row.date + "T00:00" + row.timezone),
-      datetime: new Date(row.datetime),
-    }));
-
-    console.log(`Loaded ${data.length} rows of data`);
-
-    processCommits();
-    console.log(`Processed ${commits.length} unique commits`);
-
-    // Initial update to display everything
-    updateScatterplot(filteredCommits);
-    displayStats();
-    displayCommitFiles();
-
-    // Display all commits
-    displayAllCommits();
-
-    // Setup time slider
-    setupTimeSlider();
-  } catch (error) {
-    console.error("Error loading or processing data:", error);
-  }
-}
-
-// Document ready handler
-document.addEventListener("DOMContentLoaded", async () => {
-  await loadData();
-});
